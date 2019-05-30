@@ -1,4 +1,4 @@
-# corvo
+# corvo [![Build Status](https://travis-ci.com/boranseckin/corvo.svg?branch=master)](https://travis-ci.com/boranseckin/corvo)
 
 ---
 
