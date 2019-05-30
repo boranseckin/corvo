@@ -51,7 +51,11 @@ class UrlShort extends Component {
                     {urlCount}
                 </h1>
                 <br />
-                <p>Create your shortened url!</p>
+                <p>
+                    Create your shortened url! Then use&nbsp;
+                    <i>boranseckin.com/r/(Shortened URL)</i>
+                    .
+                </p>
                 <UrlShortForm />
                 <br />
                 <table id="url-table" className="table table-hover">
