@@ -10,6 +10,10 @@ Corvo is a web application development playground.
 
 URl Shortener is a one page app to create short and humane URLs. It has a form to submit a long URL and a reactive list to show shortened version of it. User can specify the duration of the shortened URL. All the content is stored in MongoDB.
 
+In order to use the shortened URL, paste your 5 character code after `http://boranseckin.com/r/`. 
+
+A running example of the shortener can be found here: http://boranseckin.com/url
+
 ## Built With
 
 * [Meteor](https://www.meteor.com/) - The web framework used
@@ -18,7 +22,7 @@ URl Shortener is a one page app to create short and humane URLs. It has a form t
 
 ## Authors
 
-* **Boran Seckin** - [boranseckin](https://github.com/boranseckin)
+* **Boran Seckin**
 
 ## License
 
