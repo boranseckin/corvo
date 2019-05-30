@@ -1,0 +1,17 @@
+body {
+  padding: 10px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+#navbar {
+  left: 50%;
+  transform: translate(-50%);
+}
+
+#hr {
+  margin-top: 13px;
+}
+
+#content {
+  margin-top: 0px;
+}
