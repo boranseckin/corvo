@@ -18,7 +18,7 @@ A running example of the shortener can be found here: http://boranseckin.com/url
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
-#### Prerequisites
+### Prerequisites
 
 On Windows, use the installer can be found at https://www.meteor.com/install.
 
@@ -31,7 +31,7 @@ To make sure it is installed, you can run:
 meteor -version
 ```
 
-#### Installing
+### Installing
 
 Clone the repository:
 ```
@@ -47,7 +47,7 @@ meteor run
 ```
 If you visit http://localhost:3000, you should see the app up and running.
 
-#### Testing
+### Testing
 
 Meteor uses [Mocha](https://mochajs.org/) test framework and [Chai](https://www.chaijs.com/) assertion library.
 
