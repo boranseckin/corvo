@@ -2,4 +2,17 @@
 
 ---
 
-Corvo is my web application development playground. It uses [Meteor](https://www.meteor.com/) framework with [ReactJS](https://reactjs.org/) user interface library.
+Corvo is a web application development playground.
+
+## Built With
+
+* [Meteor](https://www.meteor.com/) - The web framework used
+* [ReactJS](https://reactjs.org/) - The user interface library used
+
+## Authors
+
+* **Boran Seckin** - [boranseckin](https://github.com/boranseckin)
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
