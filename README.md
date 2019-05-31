@@ -8,7 +8,7 @@ Corvo is a web application development playground.
 
 ### URL Shortener
 
-URl Shortener is a one page app to create short and humane URLs. It has a form to submit a long URL and a reactive list to show shortened version of it. User can specify the duration of the shortened URL. All the content is stored in MongoDB.
+URL Shortener is a one page app to create short and humane URLs. It has a form to submit a long URL and a reactive list to show shortened version of it. User can specify the duration of the shortened URL. All the content is stored in MongoDB.
 
 In order to use the shortened URL, paste your 5 character code after `http://boranseckin.com/r/`. 
 
