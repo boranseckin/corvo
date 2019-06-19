@@ -36,8 +36,8 @@
     "react-alert-template-basic": "^1.0.0",
     "react-dom": "^16.8.6",
     "react-mounter": "^1.2.0",
-    "react-scroll": "^1.7.11",
-    "react-transition-group": "^4.0.1",
+    "react-scroll": "^1.7.12",
+    "react-transition-group": "^4.1.1",
     "simpl-schema": "^1.5.5",
     "simple-schema": "^1.1.0"
   },
@@ -50,7 +50,7 @@
   },
   "devDependencies": {
     "@meteorjs/eslint-config-meteor": "^1.0.5",
-    "babel-eslint": "^10.0.1",
+    "babel-eslint": "^10.0.2",
     "chai": "^4.2.0",
     "eslint": "^5.16.0",
     "eslint-config-airbnb": "^17.1.0",
@@ -59,6 +59,6 @@
     "eslint-plugin-jsx-a11y": "^6.2.1",
     "eslint-plugin-meteor": "^5.1.0",
     "eslint-plugin-react": "^7.13.0",
-    "tar": "^4.4.8"
+    "tar": "^4.4.10"
   }
 }
