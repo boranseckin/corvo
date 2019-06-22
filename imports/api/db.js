@@ -1,6 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
 import { check } from 'meteor/check';
+import { HTTP } from 'meteor/http';
 
 const Test = new Mongo.Collection('test');
 
@@ -31,6 +32,9 @@ Meteor.methods({
     },
     'test.clear'() {
         Test.remove({});
+    },
+    'ip'() {
+        return HTTP.get('https://json.geoiplookup.io/').data;
     },
 
 });
