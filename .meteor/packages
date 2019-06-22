@@ -22,3 +22,5 @@ kadira:flow-router
 meteortesting:mocha
 jquery
 less
+http
+session
