@@ -1,6 +1,8 @@
+/* eslint-disable meteor/no-session */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { Meteor } from 'meteor/meteor';
 import React, { Component } from 'react';
+import { Session } from 'meteor/session';
 import propTypes from 'prop-types';
 
 export default class UrlShortRow extends Component {
@@ -25,8 +27,11 @@ export default class UrlShortRow extends Component {
     constructor(props) {
         super(props);
 
+        this.state = {
+            ip: Session.get('clientIP'),
+        };
+
         this.handleRemove = this.handleRemove.bind(this);
-        this.handleCopy = this.handleCopy.bind(this);
         this.handleOpen = this.handleOpen.bind(this);
     }
 
@@ -38,25 +43,12 @@ export default class UrlShortRow extends Component {
         Meteor.call('url.remove', _id);
     }
 
-    handleCopy(event) {
-        event.preventDefault();
-
-        const { shortUrl } = this.props;
-        const textarea = document.createElement('textarea');
-
-        textarea.value = `http://localhost:3000/r/${shortUrl}`;
-        document.body.appendChild(textarea);
-        textarea.select();
-        document.execCommand('copy');
-        document.body.removeChild(textarea);
-    }
-
     handleOpen(event) {
         event.preventDefault();
 
         const { shortUrl } = this.props;
-
-        const dynamicLink = `http://localhost:3000/r/${shortUrl}`;
+        const { ip } = this.state;
+        const dynamicLink = `http://${ip}:3000/r/${shortUrl}`;
 
         window.open(dynamicLink);
     }
