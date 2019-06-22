@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import propTypes from 'prop-types';
 
-export default class TestList extends Component {
+export default class List extends Component {
     static propTypes = {
         text: propTypes.string,
     };

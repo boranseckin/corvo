@@ -5,7 +5,7 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 import propTypes from 'prop-types';
 
 import Test from '../api/db.js';
-import TestList from './TestList.jsx';
+import List from './List.jsx';
 
 class Home extends Component {
     static propTypes = {
@@ -63,7 +63,7 @@ class Home extends Component {
 
     renderNumbers() {
         const { tests } = this.props;
-        return tests.map(test => <TestList key={test._id} text={test.text} />);
+        return tests.map(test => <List key={test._id} text={test.text} />);
     }
 
     render() {
