@@ -13,8 +13,6 @@ URL Shortener is a one page app to create short and humane URLs. It has a form t
 In order to use the shortened URL, paste your 5 character code after `/r/` path.
 Example: `http://DOMAIN/r/SHORTENED_URL`
 
-A running example of the shortener can be found here: http://boranseckin.com/url
-
 ## Installation
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
