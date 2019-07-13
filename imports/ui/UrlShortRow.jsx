@@ -28,7 +28,7 @@ export default class UrlShortRow extends Component {
         super(props);
 
         this.state = {
-            ip: Session.get('clientIP'),
+            ip: Session.get('serverIP'),
         };
 
         this.handleRemove = this.handleRemove.bind(this);

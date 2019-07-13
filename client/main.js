@@ -8,7 +8,7 @@ import '../lib/routes.js';
 Meteor.startup(() => {
     Tracker.autorun(() => {
         Meteor.call('ip', function(error, result) {
-            Session.set('clientIP', result.ip);
+            Session.set('serverIP', result.ip);
         });
     });
 });
