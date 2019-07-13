@@ -1,4 +1,4 @@
-# corvo [![Build Status](https://travis-ci.com/boranseckin/corvo.svg?branch=master)](https://travis-ci.com/boranseckin/corvo)
+# corvo [![Build Status](https://travis-ci.com/boranseckin/corvo.svg?branch=master)](https://travis-ci.com/boranseckin/corvo) ![David](https://img.shields.io/david/boranseckin/corvo.svg)
 
 Corvo is a web application development playground.
 
