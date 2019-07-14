@@ -3,7 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { Tracker } from 'meteor/tracker';
 import propTypes from 'prop-types';
 
-import URL from '../api/url.db';
+import URL from '../api/url.db.js';
 
 export default class UrlRedirect extends Component {
     static propTypes = {
