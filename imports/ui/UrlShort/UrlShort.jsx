@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { withTracker } from 'meteor/react-meteor-data';
 import propTypes from 'prop-types';
 
-import URL from '../api/url.db.js';
+import URL from '../../api/url.db.js';
 import UrlShortRow from './UrlShortRow.jsx';
 import UrlShortForm from './UrlShortForm.jsx';
 
