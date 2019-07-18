@@ -46,6 +46,20 @@ meteor run
 ```
 If you visit http://localhost:3000, you should see the app up and running.
 
+#### Using Docker
+
+The [Dockerfile](Dockerfile) is configured for a full Meteor setup over the latest Node image. It will install Meteor and all required NPM modules, then, it will run the code.
+
+The project is already pushed to Docker Hub. Use the code below to pull the Docker repository:
+```
+docker pull boranseckin/corvo:latest
+```
+
+Then run the following code to run the project in a detached container with the port 3000 exposed:
+```
+docker run -d -p 3000:3000 boranseckin/corvo
+```
+
 ### Testing
 
 Meteor uses [Mocha](https://mochajs.org/) test framework and [Chai](https://www.chaijs.com/) assertion library.
