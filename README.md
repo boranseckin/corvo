@@ -55,7 +55,7 @@ The project is already pushed to Docker Hub. Use the code below to pull the Dock
 docker pull boranseckin/corvo:latest
 ```
 
-Then run the following code to run the project in a detached container with the port 3000 exposed:
+Then, run the following code to run the project in a detached container with the port 3000 exposed:
 ```
 docker run -d -p 3000:3000 boranseckin/corvo
 ```
