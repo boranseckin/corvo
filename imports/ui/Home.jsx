@@ -4,6 +4,8 @@ import { withTracker } from 'meteor/react-meteor-data';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import propTypes from 'prop-types';
 
+import { Button, Form, Input } from 'antd';
+
 import Test from '../api/db.js';
 import List from './List.jsx';
 
@@ -72,17 +74,18 @@ class Home extends Component {
         return (
             <div>
                 <h1>Home</h1>
-                <button type="button" className="btn btn-primary" onClick={this.buttonClick}>
+                <Button type="primary" onClick={this.buttonClick}>
                     {'Clear - '}
                     {testCount}
-                </button>
+                </Button>
                 <br />
                 <h1>{inputValue}</h1>
                 <br />
-                <form onSubmit={this.handleSubmit}>
-                    <input type="text" value={inputValue} onChange={this.handleChange} />
-                    <br />
-                </form>
+                <Form layout="vertical" onSubmit={this.handleSubmit}>
+                    <Form.Item>
+                        <Input type="text" value={inputValue} onChange={this.handleChange} />
+                    </Form.Item>
+                </Form>
                 <br />
                 <ul>{this.renderNumbers()}</ul>
             </div>

@@ -1,7 +1,14 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import { Meteor } from 'meteor/meteor';
 import React, { Component } from 'react';
 import { withAlert } from 'react-alert';
 import propTypes from 'prop-types';
+
+import {
+    Button, Form, Input, Row, Col, Select,
+} from 'antd';
+
+const { Option } = Select;
 
 class UrlShortForm extends Component {
     static propTypes = {
@@ -18,7 +25,7 @@ class UrlShortForm extends Component {
         this.state = {
             inputUrlValue: '',
             inputNameValue: '',
-            inputDurationValue: '',
+            inputDurationValue: '1h',
         };
 
         this.handleUrlChange = this.handleUrlChange.bind(this);
@@ -36,7 +43,7 @@ class UrlShortForm extends Component {
     }
 
     handleDurationChange(event) {
-        this.setState({ inputDurationValue: event.target.value });
+        this.setState({ inputDurationValue: event });
     }
 
     handleSubmit(event) {
@@ -90,27 +97,36 @@ class UrlShortForm extends Component {
         const { inputUrlValue, inputNameValue } = this.state;
         return (
             <div>
-                <form onSubmit={this.handleSubmit}>
-                    <div className="row">
-                        <div className="col-6">
-                            <input type="text" className="form-control" placeholder="URL" value={inputUrlValue} onChange={this.handleUrlChange} />
-                        </div>
-                        <div className="col-3">
-                            <input type="text" className="form-control" placeholder="Name" value={inputNameValue} onChange={this.handleNameChange} />
-                        </div>
-                        <div className="col-2">
-                            <select name="duration" className="form-control" onChange={this.handleDurationChange}>
-                                <option defaultValue>Duration...</option>
-                                <option>1h</option>
-                                <option>24h</option>
-                                <option>Unlimited</option>
-                            </select>
-                        </div>
-                        <div className="col-1">
-                            <button id="url-add" type="submit" className="btn btn-success" onClick={this.handleSubmit}><i id="icon" className="material-icons">add</i></button>
-                        </div>
-                    </div>
-                </form>
+                <Form layout="inline" onSubmit={this.handleSubmit}>
+                    <Row type="flex" justify="center">
+                        <Col span={10}>
+                            <Form.Item>
+                                <Input type="text" id="url-input" placeholder="URL" value={inputUrlValue} onChange={this.handleUrlChange} />
+                            </Form.Item>
+                        </Col>
+                        <Col span={8}>
+                            <Form.Item>
+                                <Input type="text" id="name-input" placeholder="Name" value={inputNameValue} onChange={this.handleNameChange} />
+                            </Form.Item>
+                        </Col>
+                        <Col span={4}>
+                            <Form.Item>
+                                <Select defaultValue="1h" id="dur-select" style={{ width: 120 }} onChange={this.handleDurationChange}>
+                                    <Option value="1h">1h</Option>
+                                    <Option value="24h">24h</Option>
+                                    <Option value="Unlimited">Unlimited</Option>
+                                </Select>
+                            </Form.Item>
+                        </Col>
+                        <Col span={2}>
+                            <Form.Item>
+                                <Button type="primary" onClick={this.handleSubmit}>
+                                    <i id="icon" className="material-icons">add</i>
+                                </Button>
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                </Form>
             </div>
         );
     }
