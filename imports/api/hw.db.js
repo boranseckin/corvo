@@ -48,7 +48,7 @@ Meteor.methods({
         check(dueDate, Match.dueDate);
         check(submitMethod, Match.submitMethod);
         check(partners, Match.Optional([String]));
-        check(description, Match.description);
+        check(description, Match.Optional(Match.description));
 
         HW.insert({
             alias,
@@ -87,7 +87,7 @@ Meteor.methods({
         } else if (editField === 'partners') {
             check(edit, Match.Optional([String]));
         } else if (editField === 'description') {
-            check(edit, Match.description);
+            check(edit, Match.Optional(Match.description));
         } else {
             return;
         }
