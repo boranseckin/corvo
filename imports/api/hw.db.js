@@ -18,6 +18,7 @@ Match._id = Match.Where((id) => {
 Match.subject = Match.Where((subject) => {
     check(subject, String);
 
+    // Accepted Subjects
     const subjects = ['Math', 'Physics', 'Chem', 'Eng', 'CS'];
 
     return subjects.includes(subject);
@@ -26,6 +27,7 @@ Match.subject = Match.Where((subject) => {
 Match.submitMethod = Match.Where((method) => {
     check(method, String);
 
+    // Accepted Submit Methods
     const methods = ['Paper', 'Classroom'];
 
     return methods.includes(method);
