@@ -24,6 +24,9 @@ class Navbar extends Component {
                         <li className="nav-item">
                             <a className="nav-link"><hr id="hr" width="75" /></a>
                         </li>
+                        <li className={currentPath === '/' ? 'nav-item active' : 'nav-item'}>
+                            <a className="nav-link" href="/">Home</a>
+                        </li>
                         <li className={currentPath === '/url' ? 'nav-item active' : 'nav-item'}>
                             <a className="nav-link" href="/url">URL Shortener</a>
                         </li>
