@@ -1,69 +1,65 @@
-/* eslint-disable jsx-a11y/anchor-has-content */
-/* eslint-disable class-methods-use-this */
 import React, { Component } from 'react';
 import { withTracker } from 'meteor/react-meteor-data';
+import propTypes from 'prop-types';
+import {
+    Typography, Row, Col, Button,
+} from 'antd';
+
+import HWTrackBox from './HWTrackBox.jsx';
+
+const { Title } = Typography;
 
 class HWTrack extends Component {
+    static propTypes = {
+        className: propTypes.string,
+    };
+
+    static defaultProps = {
+        className: propTypes.string,
+    };
+
     constructor(props) {
         super(props);
 
         this.state = {
         };
-
-        this.handleRowExpand = this.handleRowExpand.bind(this);
-    }
-
-    handleRowExpand(e) {
-        e.preventDefault();
-        document.getElementById('button').click();
     }
 
     render() {
+        const { className } = this.props;
+        if (className === 'home') {
+            return (
+                <div>
+                    <Title>
+                        Homework Tracker
+                        <br />
+                        {className}
+                    </Title>
+                    <Row gutter={16}>
+                        <Col span={6}>
+                            <HWTrackBox className="English" />
+                        </Col>
+                        <Col span={6}>
+                            <HWTrackBox className="Math" />
+                        </Col>
+                        <Col span={6}>
+                            <HWTrackBox className="Physics" />
+                        </Col>
+                        <Col span={6}>
+                            <HWTrackBox className="CS" />
+                        </Col>
+                    </Row>
+                </div>
+            );
+        }
         return (
-            <div className="container">
-                <h1>Homework Tracker</h1>
-                <a hidden className="btn btn-primary" id="button" data-toggle="collapse" href="#multiCollapseExample1" role="button" />
-                <br />
-                <table id="hw-table" className="table table-hover">
-                    <thead>
-                        <tr>
-                            <th scope="col">Name</th>
-                            <th scope="col">Shortened URL</th>
-                            <th scope="col">Actual URL</th>
-                            <th scope="col">Created At</th>
-                            <th scope="col">Duration</th>
-                            <th scope="col">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr onClick={this.handleRowExpand}>
-                            <th>
-                                ELma
-                                <div className="collapse multi-collapse" id="multiCollapseExample1">
-                                    asda
-                                </div>
-                            </th>
-                            <th>ELma</th>
-                            <th>ELma</th>
-                            <th>ELma</th>
-                            <th>ELma</th>
-                            <th>ELma</th>
-                        </tr>
-                        <tr>
-                            <th>
-                                ELma
-                                <div className="collapse multi-collapse" id="multiCollapseExample2">
-                                    asda
-                                </div>
-                            </th>
-                            <th>ELma</th>
-                            <th>ELma</th>
-                            <th>ELma</th>
-                            <th>ELma</th>
-                            <th>ELma</th>
-                        </tr>
-                    </tbody>
-                </table>
+            <div>
+                <Title>
+                    Homework Tracker
+                    <br />
+                    {className}
+                </Title>
+                <Button href="/hw">TEST</Button>
             </div>
         );
     }
