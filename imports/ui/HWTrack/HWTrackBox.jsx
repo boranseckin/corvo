@@ -1,19 +1,27 @@
-/* eslint-disable class-methods-use-this */
 import React, { Component } from 'react';
 import { FlowRouter } from 'meteor/kadira:flow-router';
-import { withTracker } from 'meteor/react-meteor-data';
+import { Tracker } from 'meteor/tracker';
 import propTypes from 'prop-types';
+
 import {
-    Card,
+    Card, Col,
 } from 'antd';
 
 class HWTrackBox extends Component {
     static propTypes = {
+        classID: propTypes.string,
         className: propTypes.string,
+        classCode: propTypes.string,
+        classTeacher: propTypes.string,
+        classRoom: propTypes.number,
     };
 
     static defaultProps = {
+        classID: propTypes.string,
         className: propTypes.string,
+        classCode: propTypes.string,
+        classTeacher: propTypes.string,
+        classRoom: propTypes.number,
     };
 
     constructor(props) {
@@ -27,8 +35,14 @@ class HWTrackBox extends Component {
     }
 
     componentDidMount() {
-        this.setState({
-            cardLoading: false,
+        const { classID } = this.props;
+
+        Tracker.autorun(() => {
+            if (classID) {
+                this.setState({
+                    cardLoading: false,
+                });
+            }
         });
     }
 
@@ -41,22 +55,36 @@ class HWTrackBox extends Component {
     }
 
     render() {
-        const { className } = this.props;
+        const {
+            className, classCode, classTeacher, classRoom,
+        } = this.props;
         const { cardLoading } = this.state;
         return (
-            <div>
+            <Col span={6}>
                 <Card title={className} hoverable="true" loading={cardLoading} onClick={this.handleCardClick}>
                     <p>
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                         Morbi auctor aliquam ipsum vel finibus.
-                        Mauris egestas sit amet massa blandit sollicitudin.
-                        Quisque ullamcorper diam hendrerit.
+                    </p>
+                    <p>
+                        <b>Class Code:</b>
+                        &nbsp;
+                        {classCode}
+                    </p>
+                    <p>
+                        <b>Teacher:</b>
+                        &nbsp;
+                        {classTeacher}
+                    </p>
+                    <p>
+                        <b>Room Number:</b>
+                        &nbsp;
+                        {classRoom}
                     </p>
                 </Card>
-            </div>
+            </Col>
         );
     }
 }
 
-export default withTracker(() => ({
-}))(HWTrackBox);
+export default HWTrackBox;

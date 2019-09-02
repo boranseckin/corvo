@@ -8,6 +8,11 @@ if (Meteor.isServer) {
     Meteor.publish('hwClass', function hwPublication() {
         return HWClass.find();
     });
+    Meteor.publish('hwClassOne', function hwPublication(className) {
+        check(className, String);
+
+        return HWClass.find({ name: className });
+    });
 }
 
 Match._id = Match.Where((id) => {
