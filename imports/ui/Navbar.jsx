@@ -30,8 +30,8 @@ class Navbar extends Component {
                         <li className={currentPath === '/url' ? 'nav-item active' : 'nav-item'}>
                             <a className="nav-link" href="/url">URL Shortener</a>
                         </li>
-                        <li className={currentPath === '/hw' ? 'nav-item active' : 'nav-item'}>
-                            <a className="nav-link" href="/hw">HW Tracker</a>
+                        <li className={currentPath.startsWith('/hw') ? 'nav-item active' : 'nav-item'}>
+                            <a className="nav-link" href="/hw/">HW Tracker</a>
                         </li>
                         <li className="nav-item">
                             <a className="nav-link"><hr id="hr" width="75" /></a>
