@@ -15,15 +15,6 @@ Match._id = Match.Where((id) => {
     return /\b[a-zA-Z0-9]{17}\b/.test(id);
 });
 
-Match.subject = Match.Where((subject) => {
-    check(subject, String);
-
-    // Accepted Subjects
-    const subjects = ['Math', 'Physics', 'Chem', 'Eng', 'CS'];
-
-    return subjects.includes(subject);
-});
-
 Match.submitMethod = Match.Where((method) => {
     check(method, String);
 
@@ -44,9 +35,9 @@ Match.description = Match.Where((description) => {
 });
 
 Meteor.methods({
-    'hw.insert'(alias, subject, dueDate, submitMethod, partners, description) {
+    'hw.insert'(alias, classID, dueDate, submitMethod, partners, description) {
         check(alias, String);
-        check(subject, Match.subject);
+        check(classID, Match._id);
         check(dueDate, Match.dueDate);
         check(submitMethod, Match.submitMethod);
         check(partners, Match.Optional([String]));
@@ -54,7 +45,7 @@ Meteor.methods({
 
         HW.insert({
             alias,
-            subject,
+            classID,
             dueDate,
             createdAt: new Date(),
             submitMethod,
@@ -80,8 +71,8 @@ Meteor.methods({
 
         if (editField === 'alias') {
             check(edit, String);
-        } else if (editField === 'subject') {
-            check(edit, Match.subject);
+        } else if (editField === 'classID') {
+            check(edit, Match._id);
         } else if (editField === 'dueDate') {
             check(edit, Match.dueDate);
         } else if (editField === 'submitMethod') {
