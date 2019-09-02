@@ -6,18 +6,26 @@ import { assert } from 'chai';
 import { resetDatabase } from 'meteor/xolvio:cleaner';
 
 import HW from './hw.db.js';
+import HWClass from './hw.class.db.js';
 
 if (Meteor.isServer) {
     describe('DB-HW', function() {
         describe('methods', function() {
             const userID = Random.id();
             let hwID;
+            let classID;
 
             beforeEach(() => {
                 resetDatabase();
+                classID = HWClass.insert({
+                    name: 'TestClass',
+                    code: 'TTT4U1-1',
+                    teacher: 'John Doe',
+                    room: 111,
+                });
                 hwID = HW.insert({
                     alias: 'Test',
-                    subject: 'Math',
+                    classID,
                     dueDate: new Date(Date.now + (60000 * 5)),
                     createdAt: new Date(),
                     submitMethod: 'Classroom',
@@ -37,14 +45,14 @@ if (Meteor.isServer) {
                 assert.equal(query[0].alias, 'editedTest');
             });
 
-            it('can edit hw -> subject', function() {
+            it('can edit hw -> classID', function() {
                 const editHW = Meteor.server.method_handlers['hw.edit'];
                 const invocation = { userID };
 
-                editHW.apply(invocation, [hwID, 'subject', 'CS']);
+                editHW.apply(invocation, [hwID, 'classID', classID]);
 
                 const query = HW.find({ _id: hwID }).fetch();
-                assert.equal(query[0].subject, 'CS');
+                assert.equal(query[0].classID, classID);
             });
 
             it('can edit hw -> dueDate', function() {
