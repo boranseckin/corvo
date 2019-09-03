@@ -7,6 +7,8 @@ import {
     Card, Col,
 } from 'antd';
 
+import HW from '../../api/hw.db.js';
+
 class HWTrackBox extends Component {
     static propTypes = {
         classID: propTypes.string,
@@ -29,6 +31,7 @@ class HWTrackBox extends Component {
 
         this.state = {
             cardLoading: true,
+            activeHW: null,
         };
 
         this.handleCardClick = this.handleCardClick.bind(this);
@@ -39,7 +42,9 @@ class HWTrackBox extends Component {
 
         Tracker.autorun(() => {
             if (classID) {
+                const activeHW = HW.find({ classID }).count();
                 this.setState({
+                    activeHW,
                     cardLoading: false,
                 });
             }
@@ -58,14 +63,10 @@ class HWTrackBox extends Component {
         const {
             className, classCode, classTeacher, classRoom,
         } = this.props;
-        const { cardLoading } = this.state;
+        const { cardLoading, activeHW } = this.state;
         return (
             <Col span={6}>
                 <Card title={className} hoverable="true" loading={cardLoading} onClick={this.handleCardClick}>
-                    <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Morbi auctor aliquam ipsum vel finibus.
-                    </p>
                     <p>
                         <b>Class Code:</b>
                         &nbsp;
@@ -80,6 +81,11 @@ class HWTrackBox extends Component {
                         <b>Room Number:</b>
                         &nbsp;
                         {classRoom}
+                    </p>
+                    <p>
+                        <b>Active Assignments:</b>
+                        &nbsp;
+                        {activeHW}
                     </p>
                 </Card>
             </Col>
