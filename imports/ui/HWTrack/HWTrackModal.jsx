@@ -1,13 +1,41 @@
-/* eslint-disable react/prop-types */
+/* eslint-disable no-underscore-dangle */
+import { Meteor } from 'meteor/meteor';
 import React, { Component } from 'react';
+import propTypes from 'prop-types';
 
 import {
-    Modal, Form, Input, Button, Radio, DatePicker,
+    Modal, Form, Input, Button, Radio, DatePicker, Select,
 } from 'antd';
+
+const { Option } = Select;
 
 const CreateForm = Form.create({ name: 'form_in_modal' })(
     // eslint-disable-next-line
     class extends Component {
+        static propTypes = {
+            visible: propTypes.bool,
+            onCancel: propTypes.func,
+            onCreate: propTypes.func,
+            classList: propTypes.arrayOf(propTypes.object),
+            form: propTypes.objectOf(propTypes.any),
+        };
+
+        static defaultProps = {
+            visible: propTypes.bool,
+            onCancel: propTypes.func,
+            onCreate: propTypes.func,
+            classList: propTypes.arrayOf(propTypes.object),
+            form: propTypes.objectOf(propTypes.any),
+        };
+
+        renderOptions() {
+            const { classList } = this.props;
+
+            return classList.map(a => (
+                <Option key={a._id} value={a._id}>{a.name}</Option>
+            ));
+        }
+
         render() {
             const {
                 visible, onCancel, onCreate, form,
@@ -15,9 +43,22 @@ const CreateForm = Form.create({ name: 'form_in_modal' })(
 
             const { getFieldDecorator } = form;
 
+            const aliasConfig = {
+                rules: [{ required: true, message: 'Please input an alias for the assignment!' }],
+            };
+
+            const subjectConfig = {
+                rules: [{ required: true, message: 'Please select a subject!' }],
+            };
+
             const dateConfig = {
                 rules: [{ type: 'object', required: true, message: 'Please select time!' }],
             };
+
+            const descriptionConfig = {
+                rules: [{ max: 300, message: 'Description cannot be longer than 300 characters!' }],
+            };
+
 
             return (
                 <Modal
@@ -28,22 +69,36 @@ const CreateForm = Form.create({ name: 'form_in_modal' })(
                     maskClosable={false}
                     okText="Submit"
                 >
-                    <Form layout="vertical" hideRequiredMark>
-                        <Form.Item label="Title">
-                            {getFieldDecorator('title', {
-                                rules: [{ required: true, message: 'Please input an alias for the assignment!' }],
-                            })(<Input />)}
+                    <Form layout="horizontal" hideRequiredMark>
+
+                        <Form.Item label="Alias">
+                            {getFieldDecorator('alias', aliasConfig)(
+                                <Input />,
+                            )}
                         </Form.Item>
+
+                        <Form.Item label="Subject">
+                            {getFieldDecorator('subject', subjectConfig)(
+                                <Select>
+                                    {this.renderOptions()}
+                                </Select>,
+                            )}
+                        </Form.Item>
+
                         <Form.Item label="Due Date">
-                            {getFieldDecorator('date-time-picker', dateConfig)(
+                            {getFieldDecorator('dueDate', dateConfig)(
                                 <DatePicker showTime format="MM-DD-YYYY HH:mm:ss" />,
                             )}
                         </Form.Item>
+
                         <Form.Item label="Description">
-                            {getFieldDecorator('description')(<Input type="textarea" />)}
+                            {getFieldDecorator('description', descriptionConfig)(
+                                <Input type="textarea" />,
+                            )}
                         </Form.Item>
+
                         <Form.Item label="Submit Method">
-                            {getFieldDecorator('modifier', {
+                            {getFieldDecorator('submitMethod', {
                                 initialValue: 'Paper',
                             })(
                                 <Radio.Group>
@@ -52,6 +107,7 @@ const CreateForm = Form.create({ name: 'form_in_modal' })(
                                 </Radio.Group>,
                             )}
                         </Form.Item>
+
                     </Form>
                 </Modal>
             );
@@ -71,10 +127,15 @@ export default class HWTrackModal extends Component {
 
         this.state = {
             visible: false,
+            classList: [],
         };
 
         this.handleClick = this.handleClick.bind(this);
         this.handleCancel = this.handleCancel.bind(this);
+    }
+
+    componentDidMount() {
+        this.returnClass();
     }
 
     handleClick = (e) => {
@@ -88,6 +149,8 @@ export default class HWTrackModal extends Component {
     handleCancel = (e) => {
         e.preventDefault();
 
+        const { form } = this.formRef.props;
+        form.resetFields();
         this.setState({
             visible: false,
         });
@@ -100,7 +163,14 @@ export default class HWTrackModal extends Component {
                 return;
             }
 
-            console.log('Received values of form: ', values);
+            Meteor.call('hw.insert',
+                values.alias,
+                values.subject,
+                values.dueDate._d,
+                values.submitMethod,
+                [],
+                values.description);
+
             form.resetFields();
             this.setState({ visible: false });
         });
@@ -110,8 +180,14 @@ export default class HWTrackModal extends Component {
         this.formRef = formRef;
     };
 
+    returnClass = () => {
+        Meteor.call('hw.class.list', (error, result) => {
+            this.setState({ classList: result });
+        });
+    }
+
     render() {
-        const { visible } = this.state;
+        const { visible, classList } = this.state;
         return (
             <div>
                 <Button icon="plus" size="large" shape="round" onClick={this.handleClick}>New Assignment</Button>
@@ -121,6 +197,7 @@ export default class HWTrackModal extends Component {
                     visible={visible}
                     onCancel={this.handleCancel}
                     onCreate={this.handleSubmit}
+                    classList={classList}
                 />
             </div>
         );
