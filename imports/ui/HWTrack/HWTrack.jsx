@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { withTracker } from 'meteor/react-meteor-data';
 import propTypes from 'prop-types';
 import {
-    Typography, Row, Button,
+    Typography, Row,
 } from 'antd';
 
 import HWClass from '../../api/hw.class.db.js';
@@ -29,25 +29,7 @@ class HWTrack extends Component {
         super(props);
 
         this.state = {
-            modal: false,
         };
-
-        this.handleClick = this.handleClick.bind(this);
-        this.handleModalCancel = this.handleModalCancel.bind(this);
-    }
-
-    handleClick = (e) => {
-        e.preventDefault();
-        this.setState({
-            modal: true,
-        });
-    }
-
-    handleModalCancel = (e) => {
-        e.preventDefault();
-        this.setState({
-            modal: false,
-        });
     }
 
     renderClassBox() {
@@ -67,7 +49,6 @@ class HWTrack extends Component {
 
     render() {
         const { className } = this.props;
-        const { modal } = this.state;
         if (className === 'home') {
             return (
                 <div>
@@ -75,19 +56,13 @@ class HWTrack extends Component {
                         Homework Tracker
                     </Title>
 
-                    <Button icon="plus" size="large" shape="round" onClick={this.handleClick}>New Assignment</Button>
+                    <HWTrackModal />
 
-                    <br />
                     <br />
 
                     <Row gutter={16}>
                         {this.renderClassBox()}
                     </Row>
-
-                    <HWTrackModal
-                        visible={modal}
-                        onCancel={this.handleModalCancel}
-                    />
                 </div>
             );
         }
