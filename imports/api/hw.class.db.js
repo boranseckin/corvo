@@ -34,12 +34,25 @@ Meteor.methods({
             room,
         });
     },
+    'hw.class.list'() {
+        const query = HWClass.find({}).fetch();
+        const result = [];
+        query.forEach(function(hwClass) {
+            const a = {
+                key: hwClass._id,
+                _id: hwClass._id,
+                name: hwClass.name,
+            };
+            result.push(a);
+        });
+        return result;
+    },
     'hw.class.remove'(hwClassID) {
         check(hwClassID, Match._id);
 
         HWClass.remove(hwClassID);
     },
-    'hw,class.clear'() {
+    'hw.class.clear'() {
         HWClass.remove({});
     },
 });
