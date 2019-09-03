@@ -4,18 +4,20 @@ import React, { Component } from 'react';
 import propTypes from 'prop-types';
 
 import {
-    Modal, Form, Input, Button, Radio, DatePicker, Select,
+    Modal, Form, Input, Button, Radio, DatePicker, Select, Icon,
 } from 'antd';
 
 const { Option } = Select;
+let id = 0;
 
-const CreateForm = Form.create({ name: 'form_in_modal' })(
+const CreateForm = Form.create({ name: 'newAssignmentForm' })(
     // eslint-disable-next-line
     class extends Component {
         static propTypes = {
             visible: propTypes.bool,
             onCancel: propTypes.func,
             onCreate: propTypes.func,
+            confirmLoading: propTypes.bool,
             classList: propTypes.arrayOf(propTypes.object),
             form: propTypes.objectOf(propTypes.any),
         };
@@ -24,9 +26,33 @@ const CreateForm = Form.create({ name: 'form_in_modal' })(
             visible: propTypes.bool,
             onCancel: propTypes.func,
             onCreate: propTypes.func,
+            confirmLoading: propTypes.bool,
             classList: propTypes.arrayOf(propTypes.object),
             form: propTypes.objectOf(propTypes.any),
         };
+
+        removePartner = (k) => {
+            const { form } = this.props;
+            const keys = form.getFieldValue('keys');
+
+            if (keys.length === 1) {
+                return;
+            }
+
+            form.setFieldsValue({
+                keys: keys.filter(key => key !== k),
+            });
+        }
+
+        addPartner = () => {
+            const { form } = this.props;
+            const keys = form.getFieldValue('keys');
+            const nextKeys = keys.concat(id += 1);
+
+            form.setFieldsValue({
+                keys: nextKeys,
+            });
+        }
 
         renderOptions() {
             const { classList } = this.props;
@@ -44,10 +70,10 @@ const CreateForm = Form.create({ name: 'form_in_modal' })(
 
         render() {
             const {
-                visible, onCancel, onCreate, form,
+                visible, onCancel, onCreate, form, confirmLoading,
             } = this.props;
 
-            const { getFieldDecorator } = form;
+            const { getFieldDecorator, getFieldValue } = form;
 
             const aliasConfig = {
                 rules: [{ required: true, message: 'Please input an alias for the assignment!' }],
@@ -65,6 +91,59 @@ const CreateForm = Form.create({ name: 'form_in_modal' })(
                 rules: [{ max: 300, message: 'Description cannot be longer than 300 characters!' }],
             };
 
+            const autoSizeConfig = {
+                minRows: 2,
+                maxRows: 3,
+            };
+
+            const formItemLayout = {
+                labelCol: {
+                    xs: { span: 24 },
+                    sm: { span: 6 },
+                },
+                wrapperCol: {
+                    xs: { span: 24 },
+                    sm: { span: 16 },
+                },
+            };
+
+            const formItemLayoutWithOutLabel = {
+                wrapperCol: {
+                    xs: { span: 24, offset: 6 },
+                    sm: { span: 16, offset: 6 },
+                },
+            };
+
+            getFieldDecorator('keys', { initialValue: [] });
+            const keys = getFieldValue('keys');
+            const partnerForm = keys.map((k, index) => (
+                <Form.Item
+                    {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
+                    label={index === 0 ? 'Partner(s)' : ''}
+                    required={false}
+                    key={k}
+                >
+
+                    {getFieldDecorator(`names[${k}]`, {
+                        validateTrigger: ['onChange', 'onBlur'],
+                        rules: [
+                            {
+                                required: true,
+                                whitespace: true,
+                                message: "Please input partner's name or delete this field!",
+                            },
+                        ],
+                    })(<Input placeholder="Partner name" style={{ width: '62%', marginRight: 8 }} />)}
+                    {keys.length > 1 ? (
+                        <Icon
+                            className="dynamic-delete-button"
+                            type="minus-circle-o"
+                            onClick={() => this.removePartner(k)}
+                        />
+                    ) : null}
+
+                </Form.Item>
+            ));
 
             return (
                 <Modal
@@ -73,9 +152,11 @@ const CreateForm = Form.create({ name: 'form_in_modal' })(
                     onCancel={onCancel}
                     onOk={onCreate}
                     maskClosable={false}
+                    confirmLoading={confirmLoading}
                     okText="Submit"
                 >
-                    <Form layout="horizontal" hideRequiredMark>
+
+                    <Form {...formItemLayout} layout="horizontal" hideRequiredMark>
 
                         <Form.Item label="Alias">
                             {getFieldDecorator('alias', aliasConfig)(
@@ -97,9 +178,18 @@ const CreateForm = Form.create({ name: 'form_in_modal' })(
                             )}
                         </Form.Item>
 
+                        {partnerForm}
+
+                        <Form.Item {...formItemLayoutWithOutLabel}>
+                            <Button type="dashed" onClick={this.addPartner} style={{ width: '62%' }}>
+                                <Icon type="plus" />
+                                Add field
+                            </Button>
+                        </Form.Item>
+
                         <Form.Item label="Description">
                             {getFieldDecorator('description', descriptionConfig)(
-                                <Input type="textarea" />,
+                                <Input.TextArea rows={3} autosize={autoSizeConfig} />,
                             )}
                         </Form.Item>
 
@@ -115,6 +205,7 @@ const CreateForm = Form.create({ name: 'form_in_modal' })(
                         </Form.Item>
 
                     </Form>
+
                 </Modal>
             );
         }
@@ -134,6 +225,7 @@ export default class HWTrackModal extends Component {
         this.state = {
             visible: false,
             classList: [],
+            confirmLoading: false,
         };
 
         this.handleClick = this.handleClick.bind(this);
@@ -169,16 +261,27 @@ export default class HWTrackModal extends Component {
                 return;
             }
 
+            const { keys, names } = values;
+
+            this.setState({ confirmLoading: true });
+
+            const partners = keys.map(key => names[key]);
+
             Meteor.call('hw.insert',
                 values.alias,
                 values.subject,
                 values.dueDate._d,
                 values.submitMethod,
-                [],
+                partners,
                 values.description);
 
-            form.resetFields();
-            this.setState({ visible: false });
+            setTimeout(() => {
+                this.setState({
+                    visible: false,
+                    confirmLoading: false,
+                });
+                form.resetFields();
+            }, 2000);
         });
     }
 
@@ -193,7 +296,7 @@ export default class HWTrackModal extends Component {
     }
 
     render() {
-        const { visible, classList } = this.state;
+        const { visible, classList, confirmLoading } = this.state;
         return (
             <div>
                 <Button icon="plus" size="large" shape="round" onClick={this.handleClick}>New Assignment</Button>
@@ -203,6 +306,7 @@ export default class HWTrackModal extends Component {
                     visible={visible}
                     onCancel={this.handleCancel}
                     onCreate={this.handleSubmit}
+                    confirmLoading={confirmLoading}
                     classList={classList}
                 />
             </div>
