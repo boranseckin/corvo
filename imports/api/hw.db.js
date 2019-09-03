@@ -31,7 +31,7 @@ Match.dueDate = Match.Where((date) => {
 
 Match.description = Match.Where((description) => {
     check(description, String);
-    return description.length < 300;
+    return description.length <= 300;
 });
 
 Meteor.methods({
