@@ -32,7 +32,13 @@ const CreateForm = Form.create({ name: 'form_in_modal' })(
             const { classList } = this.props;
 
             return classList.map(a => (
-                <Option key={a._id} value={a._id}>{a.name}</Option>
+                <Option key={a._id} value={a._id}>
+                    {a.name}
+                    &nbsp;
+                    -
+                    &nbsp;
+                    {a.code}
+                </Option>
             ));
         }
 

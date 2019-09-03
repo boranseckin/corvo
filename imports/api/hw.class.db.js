@@ -42,6 +42,7 @@ Meteor.methods({
                 key: hwClass._id,
                 _id: hwClass._id,
                 name: hwClass.name,
+                code: hwClass.code,
             };
             result.push(a);
         });
