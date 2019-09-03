@@ -35,10 +35,6 @@ const CreateForm = Form.create({ name: 'newAssignmentForm' })(
             const { form } = this.props;
             const keys = form.getFieldValue('keys');
 
-            if (keys.length === 1) {
-                return;
-            }
-
             form.setFieldsValue({
                 keys: keys.filter(key => key !== k),
             });
@@ -134,13 +130,11 @@ const CreateForm = Form.create({ name: 'newAssignmentForm' })(
                             },
                         ],
                     })(<Input placeholder="Partner name" style={{ width: '62%', marginRight: 8 }} />)}
-                    {keys.length > 1 ? (
-                        <Icon
-                            className="dynamic-delete-button"
-                            type="minus-circle-o"
-                            onClick={() => this.removePartner(k)}
-                        />
-                    ) : null}
+                    <Icon
+                        className="dynamic-delete-button"
+                        type="minus-circle-o"
+                        onClick={() => this.removePartner(k)}
+                    />
 
                 </Form.Item>
             ));
@@ -182,8 +176,8 @@ const CreateForm = Form.create({ name: 'newAssignmentForm' })(
 
                         <Form.Item {...formItemLayoutWithOutLabel}>
                             <Button type="dashed" onClick={this.addPartner} style={{ width: '62%' }}>
-                                <Icon type="plus" />
-                                Add field
+                                <Icon type="plus" style={{ verticalAlign: 0 }} />
+                                Add Partner
                             </Button>
                         </Form.Item>
 
