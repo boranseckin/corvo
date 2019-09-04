@@ -42,7 +42,7 @@ Meteor.methods({
         check(dueDate, Match.dueDate);
         check(submitMethod, Match.submitMethod);
         check(partners, Match.Optional([String]));
-        check(description, Match.Optional(Match.description));
+        check(description, Match.Maybe(Match.description));
 
         HW.insert({
             alias,
