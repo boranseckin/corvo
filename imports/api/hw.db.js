@@ -1,6 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
 import { check, Match } from 'meteor/check';
+import moment from 'moment';
 
 const HW = new Mongo.Collection('hw');
 
@@ -47,7 +48,7 @@ Meteor.methods({
             alias,
             classID,
             dueDate,
-            createdAt: new Date(),
+            createdAt: moment(),
             submitMethod,
             partners,
             description,

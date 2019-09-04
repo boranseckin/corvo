@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import { Meteor } from 'meteor/meteor';
 import React, { Component } from 'react';
 import { Tracker } from 'meteor/tracker';
@@ -72,16 +73,24 @@ export default class HWTrackClass extends Component {
         this.data = [];
 
         activeHW.map((hw) => {
+            let partnerString = '';
+            for (let i = 0; i < hw.partners.length; i += 1) {
+                if (i === hw.partners.length - 1) {
+                    partnerString += `${hw.partners[i]}`;
+                } else {
+                    partnerString += `${hw.partners[i]}, `;
+                }
+            }
             const hwData = {
                 key: this.data.length + 1,
                 id: hw._id,
                 alias: hw.alias,
                 submitMethod: hw.submitMethod,
-                dueDate: hw.dueDate.toUTCString(),
+                dueDate: hw.dueDate.toString(),
                 daysLeft: this.calculateDateDiff(hw.dueDate),
                 description: hw.description,
-                partners: hw.partners,
-                createdAt: hw.createdAt.toUTCString(),
+                partners: partnerString,
+                createdAt: hw.createdAt._d.toString(),
             };
             this.data.push(hwData);
             return hwData;
@@ -161,9 +170,9 @@ export default class HWTrackClass extends Component {
                             <Table
                                 columns={columns}
                                 expandedRowRender={record => (
-                                    <Descriptions>
-                                        <Descriptions.Item label="Partners">{record.partners}</Descriptions.Item>
-                                        <Descriptions.Item label="Created At">{record.createdAt}</Descriptions.Item>
+                                    <Descriptions layout="vertical">
+                                        <Descriptions.Item label="Partners" span={1}>{record.partners}</Descriptions.Item>
+                                        <Descriptions.Item label="Created At" span={2}>{record.createdAt}</Descriptions.Item>
                                         <Descriptions.Item label="Description">{record.description}</Descriptions.Item>
                                     </Descriptions>
                                 )}

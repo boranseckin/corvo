@@ -73,6 +73,7 @@ class HWTrack extends Component {
                     &nbsp;
                     {className}
                 </Title>
+
                 <HWTrackClass className={className} />
             </div>
         );
