@@ -40,7 +40,7 @@ class HWTrackBox extends Component {
     componentDidMount() {
         const { classID } = this.props;
 
-        Tracker.autorun(() => {
+        this.tracker = Tracker.autorun(() => {
             if (classID) {
                 const activeHW = HW.find({ classID }).count();
                 this.setState({
@@ -49,6 +49,10 @@ class HWTrackBox extends Component {
                 });
             }
         });
+    }
+
+    componentWillUnmount() {
+        this.tracker.stop();
     }
 
     handleCardClick(event) {

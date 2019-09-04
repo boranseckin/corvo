@@ -40,7 +40,7 @@ export default class HWTrackClass extends Component {
     componentDidMount() {
         const { className } = this.props;
 
-        Tracker.autorun(() => {
+        this.tracker = Tracker.autorun(() => {
             Meteor.subscribe('hwClassOne', className);
             Meteor.subscribe('hws');
 
@@ -54,6 +54,10 @@ export default class HWTrackClass extends Component {
                 });
             }
         });
+    }
+
+    componentWillUnmount() {
+        this.tracker.stop();
     }
 
     handleCheck = (value) => {
