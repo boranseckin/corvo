@@ -1,7 +1,3 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable jsx-a11y/anchor-is-valid */
-/* eslint-disable array-callback-return */
-/* eslint-disable class-methods-use-this */
 import { Meteor } from 'meteor/meteor';
 import React, { Component } from 'react';
 import { Tracker } from 'meteor/tracker';
@@ -14,6 +10,7 @@ import {
     Divider,
     Button,
     Descriptions,
+    Popconfirm,
 } from 'antd';
 
 import HWClass from '../../api/hw.class.db.js';
@@ -35,6 +32,8 @@ export default class HWTrackClass extends Component {
             currentClass: {},
             activeHW: [],
         };
+
+        this.handleCheck = this.handleCheck.bind(this);
     }
 
     componentDidMount() {
@@ -56,7 +55,11 @@ export default class HWTrackClass extends Component {
         });
     }
 
-    calculateDateDiff(due) {
+    handleCheck = (value) => {
+        Meteor.call('hw.complete', value.id);
+    }
+
+    calculateDateDiff = (due) => {
         const msPerDay = 1000 * 60 * 60 * 24;
         const date = new Date();
 
@@ -71,6 +74,7 @@ export default class HWTrackClass extends Component {
         activeHW.map((hw) => {
             const hwData = {
                 key: this.data.length + 1,
+                id: hw._id,
                 alias: hw.alias,
                 submitMethod: hw.submitMethod,
                 dueDate: hw.dueDate.toUTCString(),
@@ -80,9 +84,9 @@ export default class HWTrackClass extends Component {
                 createdAt: hw.createdAt.toUTCString(),
             };
             this.data.push(hwData);
+            return hwData;
         });
     }
-
 
     render() {
         const { currentClass, activeHW } = this.state;
@@ -115,7 +119,12 @@ export default class HWTrackClass extends Component {
                     <span>
                         <Button icon="edit" shape="round" />
                         <Divider type="vertical" />
-                        <Button icon="check" shape="round" />
+                        <Popconfirm
+                            title="Are you sure to complete this task?"
+                            onConfirm={() => this.handleCheck(record)}
+                        >
+                            <Button icon="check" shape="round" />
+                        </Popconfirm>
                     </span>
                 ),
             },
@@ -151,7 +160,6 @@ export default class HWTrackClass extends Component {
                         <Col span={16}>
                             <Table
                                 columns={columns}
-                                expandRowByClick
                                 expandedRowRender={record => (
                                     <Descriptions>
                                         <Descriptions.Item label="Partners">{record.partners}</Descriptions.Item>
