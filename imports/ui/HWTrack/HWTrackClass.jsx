@@ -13,6 +13,7 @@ import {
     Button,
     Descriptions,
     Popconfirm,
+    Badge,
     message,
 } from 'antd';
 
@@ -91,14 +92,28 @@ export default class HWTrackClass extends Component {
 
             const createdAt = moment(hw.createdAt, 'dddd, MMMM Do YYYY, h:mm:ss a');
             const dueDate = moment(hw.dueDate, 'dddd, MMMM Do YYYY, h:mm:ss a');
+            const diff = this.calculateDateDiff(dueDate);
+
+            let badge;
+
+            if (diff > 1) {
+                badge = <Badge status="processing" text="Active" />;
+            } else if (diff === 1) {
+                badge = <Badge status="warning" text="Due Today" />;
+            } else if (diff === 2) {
+                badge = <Badge status="warning" text="Due Tomorrow" />;
+            } else {
+                badge = <Badge status="error" text="Late" />;
+            }
 
             const hwData = {
                 key: this.data.length + 1,
                 id: hw._id,
+                status: badge,
                 alias: hw.alias,
                 submitMethod: hw.submitMethod,
                 dueDate: dueDate.format('ddd, MMM Do YYYY, h:mm:ss A'),
-                daysLeft: this.calculateDateDiff(dueDate),
+                daysLeft: diff,
                 description: hw.description,
                 partners: partnerString,
                 createdAt: createdAt.format('ddd, MMM Do YYYY, h:mm:ss A'),
@@ -121,11 +136,6 @@ export default class HWTrackClass extends Component {
                 title: 'Alias',
                 dataIndex: 'alias',
                 key: 'alias',
-            },
-            {
-                title: 'Submit Method',
-                dataIndex: 'submitMethod',
-                key: 'submitMethod',
             },
             {
                 title: 'Due Date',
@@ -188,7 +198,8 @@ export default class HWTrackClass extends Component {
                                 expandedRowRender={record => (
                                     <Descriptions layout="vertical">
                                         <Descriptions.Item label="Partners" span={1}>{record.partners}</Descriptions.Item>
-                                        <Descriptions.Item label="Created At" span={2}>{record.createdAt}</Descriptions.Item>
+                                        <Descriptions.Item label="Submit Method" span={1}>{record.submitMethod}</Descriptions.Item>
+                                        <Descriptions.Item label="Created At" span={1}>{record.createdAt}</Descriptions.Item>
                                         <Descriptions.Item label="Description">{record.description}</Descriptions.Item>
                                     </Descriptions>
                                 )}
