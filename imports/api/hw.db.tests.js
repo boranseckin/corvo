@@ -3,6 +3,7 @@
 import { Meteor } from 'meteor/meteor';
 import { Random } from 'meteor/random';
 import { assert } from 'chai';
+import { moment } from 'meteor/momentjs:moment';
 import { resetDatabase } from 'meteor/xolvio:cleaner';
 
 import HW from './hw.db.js';
@@ -59,7 +60,7 @@ if (Meteor.isServer) {
                 const editHW = Meteor.server.method_handlers['hw.edit'];
                 const invocation = { userID };
 
-                const date = new Date(Date.now() + (60000 * 3));
+                const date = moment().add(1, 'days').format('dddd, MMMM Do YYYY, h:mm:ss a');
 
                 editHW.apply(invocation, [hwID, 'dueDate', date]);
 
