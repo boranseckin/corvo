@@ -154,7 +154,7 @@ const CreateForm = Form.create({ name: 'newAssignmentForm' })(
 
                         <Form.Item label="Alias">
                             {getFieldDecorator('alias', aliasConfig)(
-                                <Input />,
+                                <Input autoFocus />,
                             )}
                         </Form.Item>
 
