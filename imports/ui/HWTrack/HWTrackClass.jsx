@@ -65,13 +65,7 @@ export default class HWTrackClass extends Component {
         Meteor.call('hw.complete', value.id);
     }
 
-    calculateDateDiff = (due) => {
-        const msPerDay = 1000 * 60 * 60 * 24;
-        const date = moment();
-
-        // return Math.floor((due - date) / msPerDay + 1);
-        return due.diff(date, 'days');
-    }
+    calculateDateDiff = due => due.diff(moment(), 'days');
 
     createFormData() {
         const { activeHW } = this.state;
