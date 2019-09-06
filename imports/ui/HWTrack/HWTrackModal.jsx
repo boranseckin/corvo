@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import propTypes from 'prop-types';
 
 import {
-    Modal, Form, Input, Button, Radio, DatePicker, Select, Icon,
+    Modal, Form, Input, Button, Radio, DatePicker, Select, Icon, message,
 } from 'antd';
 
 const { Option } = Select;
@@ -267,7 +267,14 @@ export default class HWTrackModal extends Component {
                 values.dueDate.format('dddd, MMMM Do YYYY, h:mm:ss a'),
                 values.submitMethod,
                 partners,
-                values.description);
+                values.description,
+                (error) => {
+                    if (error) {
+                        message.error('The process was unsuccessful. Please try again!');
+                        return;
+                    }
+                    message.success('The assignment was succesfully added!');
+                });
 
             setTimeout(() => {
                 this.setState({

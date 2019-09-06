@@ -13,6 +13,7 @@ import {
     Button,
     Descriptions,
     Popconfirm,
+    message,
 } from 'antd';
 
 import HWClass from '../../api/hw.class.db.js';
@@ -62,7 +63,13 @@ export default class HWTrackClass extends Component {
     }
 
     handleCheck = (value) => {
-        Meteor.call('hw.complete', value.id);
+        Meteor.call('hw.complete', value.id, (error) => {
+            if (error) {
+                message.error('The process was unsuccessful. Please try again!');
+                return;
+            }
+            message.success('The assignment was succesfully completed!');
+        });
     }
 
     calculateDateDiff = due => due.diff(moment(), 'days');
@@ -105,6 +112,11 @@ export default class HWTrackClass extends Component {
         const { currentClass, activeHW } = this.state;
 
         const columns = [
+            {
+                title: 'Status',
+                dataIndex: 'status',
+                key: 'status',
+            },
             {
                 title: 'Alias',
                 dataIndex: 'alias',
