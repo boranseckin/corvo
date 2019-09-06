@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
+import { Meteor } from 'meteor/meteor';
 import { FlowRouter } from 'meteor/kadira:flow-router';
+import { withTracker } from 'meteor/react-meteor-data';
 import { Tracker } from 'meteor/tracker';
 import propTypes from 'prop-types';
 
@@ -16,6 +18,7 @@ class HWTrackBox extends Component {
         classCode: propTypes.string,
         classTeacher: propTypes.string,
         classRoom: propTypes.number,
+        hws: propTypes.arrayOf(propTypes.object),
     };
 
     static defaultProps = {
@@ -24,6 +27,7 @@ class HWTrackBox extends Component {
         classCode: propTypes.string,
         classTeacher: propTypes.string,
         classRoom: propTypes.number,
+        hws: propTypes.arrayOf(propTypes.object),
     };
 
     constructor(props) {
@@ -38,11 +42,12 @@ class HWTrackBox extends Component {
     }
 
     componentDidMount() {
-        const { classID } = this.props;
+        const { classID, hws } = this.props;
 
         this.tracker = Tracker.autorun(() => {
             if (classID) {
-                const activeHW = HW.find({ classID }).count();
+                const activeHW = this.checkClassID(hws);
+
                 this.setState({
                     activeHW,
                     cardLoading: false,
@@ -53,6 +58,19 @@ class HWTrackBox extends Component {
 
     componentWillUnmount() {
         this.tracker.stop();
+    }
+
+    checkClassID(hws) {
+        const { classID } = this.props;
+        let counter = 0;
+
+        for (let i = 0; i < hws.length; i += 1) {
+            if (hws[i].classID === classID && hws[i].isCompleted === false) {
+                counter += 1;
+            }
+        }
+
+        return counter;
     }
 
     handleCardClick(event) {
@@ -97,4 +115,9 @@ class HWTrackBox extends Component {
     }
 }
 
-export default HWTrackBox;
+export default withTracker(() => {
+    Meteor.subscribe('hws');
+    return {
+        hws: HW.find({}).fetch(),
+    };
+})(HWTrackBox);
