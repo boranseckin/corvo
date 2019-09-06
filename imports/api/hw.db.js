@@ -11,6 +11,10 @@ if (Meteor.isServer) {
     });
 }
 
+function createDate() {
+    return moment().format('dddd, MMMM Do YYYY, h:mm:ss a');
+}
+
 Match._id = Match.Where((id) => {
     check(id, String);
     return /\b[a-zA-Z0-9]{17}\b/.test(id);
@@ -26,8 +30,15 @@ Match.submitMethod = Match.Where((method) => {
 });
 
 Match.dueDate = Match.Where((date) => {
-    check(date, Date);
-    return date > new Date();
+    check(date, String);
+
+    const dueDate = moment(date, 'dddd, MMMM Do YYYY, h:mm:ss a');
+
+    if (dueDate.diff(moment(), 'hours') > 0) {
+        return true;
+    }
+
+    return false;
 });
 
 Match.description = Match.Where((description) => {
@@ -48,7 +59,7 @@ Meteor.methods({
             alias,
             classID,
             dueDate,
-            createdAt: moment(),
+            createdAt: createDate(),
             submitMethod,
             partners,
             description,

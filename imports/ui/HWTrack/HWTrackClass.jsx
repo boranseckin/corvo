@@ -3,6 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import React, { Component } from 'react';
 import { Tracker } from 'meteor/tracker';
 import propTypes from 'prop-types';
+import { moment } from 'meteor/momentjs:moment';
 
 import {
     Table,
@@ -66,12 +67,13 @@ export default class HWTrackClass extends Component {
 
     calculateDateDiff = (due) => {
         const msPerDay = 1000 * 60 * 60 * 24;
-        const date = new Date();
+        const date = moment();
 
-        return Math.floor((due - date) / msPerDay + 1);
+        // return Math.floor((due - date) / msPerDay + 1);
+        return due.diff(date, 'days');
     }
 
-    createFormDate() {
+    createFormData() {
         const { activeHW } = this.state;
 
         this.data = [];
@@ -85,16 +87,20 @@ export default class HWTrackClass extends Component {
                     partnerString += `${hw.partners[i]}, `;
                 }
             }
+
+            const createdAt = moment(hw.createdAt, 'dddd, MMMM Do YYYY, h:mm:ss a');
+            const dueDate = moment(hw.dueDate, 'dddd, MMMM Do YYYY, h:mm:ss a');
+
             const hwData = {
                 key: this.data.length + 1,
                 id: hw._id,
                 alias: hw.alias,
                 submitMethod: hw.submitMethod,
-                dueDate: hw.dueDate.toString(),
-                daysLeft: this.calculateDateDiff(hw.dueDate),
+                dueDate: dueDate.format('ddd, MMM Do YYYY, h:mm:ss A'),
+                daysLeft: this.calculateDateDiff(dueDate),
                 description: hw.description,
                 partners: partnerString,
-                createdAt: hw.createdAt._d.toString(),
+                createdAt: createdAt.format('ddd, MMM Do YYYY, h:mm:ss A'),
             };
             this.data.push(hwData);
             return hwData;
@@ -144,7 +150,7 @@ export default class HWTrackClass extends Component {
         ];
 
         if (currentClass) {
-            this.createFormDate();
+            this.createFormData();
             return (
                 <div>
                     <p>

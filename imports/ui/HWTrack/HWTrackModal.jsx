@@ -264,7 +264,7 @@ export default class HWTrackModal extends Component {
             Meteor.call('hw.insert',
                 values.alias,
                 values.subject,
-                values.dueDate._d,
+                values.dueDate.format('dddd, MMMM Do YYYY, h:mm:ss a'),
                 values.submitMethod,
                 partners,
                 values.description);
