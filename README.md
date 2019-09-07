@@ -9,7 +9,7 @@ Corvo is a web application development playground.
 
 ### HW Tracker
 
-Homework Tracker is a one page app to keep track of assignments across multiple subjects. It provides a brief summary page with each subject's information and a thorough detail page for all listed subjects. The user can add new assignments to predefined classes by filling out the modal form at the summary page. The detail pages offer lists of active assignments with the option of marking them completed.
+Homework Tracker is a one page app to keep track of assignments across multiple subjects. It provides a brief summary page with each subject's information and a thorough detail page for all listed subjects. The user can add new assignments to predefined classes by filling out the modal form at the summary page. The detail pages offer lists of active assignments with the options of editing and marking them completed.
 
 ### URL Shortener
 
