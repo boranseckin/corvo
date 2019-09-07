@@ -7,8 +7,8 @@ import { assert } from 'chai';
 import URL from './url.db.js';
 
 if (Meteor.isServer) {
-    describe('DB-URL', () => {
-        describe('methods', () => {
+    describe('DB-URL', function() {
+        describe('methods', function() {
             const userID = Random.id();
             let urlID;
 
@@ -21,7 +21,7 @@ if (Meteor.isServer) {
                 });
             });
 
-            it('can delete url', () => {
+            it('can delete url', function() {
                 const deleteURL = Meteor.server.method_handlers['url.remove'];
                 const invocation = { userID };
 

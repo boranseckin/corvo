@@ -31,13 +31,13 @@ export default class App extends Component {
         };
 
         return (
-            <div className="container-fluid">
+            <div>
                 <center>
                     <Navbar
                         currentPath={FlowRouter.current().route.path}
                     />
 
-                    <div className="row justify-content-md-center">
+                    <div>
                         <AlertProvider template={AlertTemplate} {...option}>
                             <div id="content">
                                 {content}

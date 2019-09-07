@@ -348,4 +348,7 @@ lint/tmp/
 # Ignore all local history of files
 .history
 
+# MongoDB Dump
+dump/
+
 # End of https://www.gitignore.io/api/node,meteor,meteorjs,reactnative,visualstudiocode
