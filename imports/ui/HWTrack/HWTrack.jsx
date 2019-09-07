@@ -10,7 +10,7 @@ import HWClass from '../../api/hw.class.db.js';
 
 import HWTrackBox from './HWTrackBox.jsx';
 import HWTrackClass from './HWTrackClass.jsx';
-import HWTrackModal from './HWTrackModal.jsx';
+import HWTrackAddModal from './HWTrackAddModal.jsx';
 
 const { Title } = Typography;
 
@@ -56,7 +56,7 @@ class HWTrack extends Component {
                         Homework Tracker
                     </Title>
 
-                    <HWTrackModal />
+                    <HWTrackAddModal />
 
                     <br />
 

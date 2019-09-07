@@ -17,6 +17,8 @@ import {
     message,
 } from 'antd';
 
+import HWTrackEditModal from './HWTrackEditModal.jsx';
+
 import HWClass from '../../api/hw.class.db.js';
 import HW from '../../api/hw.db.js';
 
@@ -35,9 +37,11 @@ export default class HWTrackClass extends Component {
         this.state = {
             currentClass: {},
             activeHW: [],
+            editHW: null,
         };
 
         this.handleCheck = this.handleCheck.bind(this);
+        this.handleEdit = this.handleEdit.bind(this);
     }
 
     componentDidMount() {
@@ -73,6 +77,18 @@ export default class HWTrackClass extends Component {
         });
     }
 
+    handleEdit = (value) => {
+        this.setState({
+            editHW: value.id,
+        });
+    }
+
+    fixModal = () => {
+        this.setState({
+            editHW: null,
+        });
+    }
+
     calculateDateDiff = due => due.diff(moment(), 'days');
 
     createFormData() {
@@ -98,9 +114,9 @@ export default class HWTrackClass extends Component {
 
             if (diff > 1) {
                 badge = <Badge status="processing" text="Active" />;
-            } else if (diff === 1) {
+            } else if (diff === 0) {
                 badge = <Badge status="warning" text="Due Today" />;
-            } else if (diff === 2) {
+            } else if (diff === 1) {
                 badge = <Badge status="warning" text="Due Tomorrow" />;
             } else {
                 badge = <Badge status="error" text="Late" />;
@@ -118,13 +134,16 @@ export default class HWTrackClass extends Component {
                 partners: partnerString,
                 createdAt: createdAt.format('ddd, MMM Do YYYY, h:mm:ss A'),
             };
+
             this.data.push(hwData);
             return hwData;
         });
     }
 
     render() {
-        const { currentClass, activeHW } = this.state;
+        const {
+            currentClass, activeHW, editHW,
+        } = this.state;
 
         const columns = [
             {
@@ -152,7 +171,7 @@ export default class HWTrackClass extends Component {
                 key: 'action',
                 render: (text, record) => (
                     <span>
-                        <Button icon="edit" shape="round" />
+                        <Button icon="edit" shape="round" onClick={() => this.handleEdit(record)} />
                         <Divider type="vertical" />
                         <Popconfirm
                             title="Are you sure to complete this task?"
@@ -165,7 +184,7 @@ export default class HWTrackClass extends Component {
             },
         ];
 
-        if (currentClass) {
+        if (currentClass.code) {
             this.createFormData();
             return (
                 <div>
@@ -209,6 +228,11 @@ export default class HWTrackClass extends Component {
                         </Col>
                         <Col span={4} />
                     </Row>
+                    <HWTrackEditModal
+                        key={Math.random()}
+                        editID={editHW}
+                        fixModal={this.fixModal}
+                    />
                 </div>
             );
         }

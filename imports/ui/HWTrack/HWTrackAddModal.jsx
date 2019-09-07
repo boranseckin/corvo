@@ -207,12 +207,6 @@ const CreateForm = Form.create({ name: 'newAssignmentForm' })(
 );
 
 export default class HWTrackModal extends Component {
-    static propTypes = {
-    };
-
-    static defaultProps = {
-    };
-
     constructor(props) {
         super(props);
 
@@ -257,8 +251,6 @@ export default class HWTrackModal extends Component {
 
             const { keys, names } = values;
 
-            this.setState({ confirmLoading: true });
-
             const partners = keys.map(key => names[key]);
 
             Meteor.call('hw.insert',
@@ -276,13 +268,10 @@ export default class HWTrackModal extends Component {
                     message.success('The assignment was succesfully added!');
                 });
 
-            setTimeout(() => {
-                this.setState({
-                    visible: false,
-                    confirmLoading: false,
-                });
-                form.resetFields();
-            }, 2000);
+            this.setState({
+                visible: false,
+                confirmLoading: false,
+            }, () => form.resetFields());
         });
     }
 

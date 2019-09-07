@@ -27,8 +27,8 @@ if (Meteor.isServer) {
                 hwID = HW.insert({
                     alias: 'Test',
                     classID,
-                    dueDate: new Date(Date.now + (60000 * 5)),
-                    createdAt: new Date(),
+                    dueDate: moment().add(1, 'days').format('dddd, MMMM Do YYYY, h:mm:ss a'),
+                    createdAt: moment().format('dddd, MMMM Do YYYY, h:mm:ss a'),
                     submitMethod: 'Classroom',
                     partners: ['TestPerson1', 'TestPerson2'],
                     description: 'ToT',
@@ -60,7 +60,7 @@ if (Meteor.isServer) {
                 const editHW = Meteor.server.method_handlers['hw.edit'];
                 const invocation = { userID };
 
-                const date = moment().add(1, 'days').format('dddd, MMMM Do YYYY, h:mm:ss a');
+                const date = moment().add(2, 'days').format('dddd, MMMM Do YYYY, h:mm:ss a');
 
                 editHW.apply(invocation, [hwID, 'dueDate', date]);
 
@@ -97,6 +97,24 @@ if (Meteor.isServer) {
 
                 const query = HW.find({ _id: hwID }).fetch();
                 assert.equal(query[0].description, 'LoremDescriptionIpsum');
+            });
+
+            it('can update hw', function() {
+                const updateHW = Meteor.server.method_handlers['hw.update'];
+                const invocation = { userID };
+
+                updateHW.apply(invocation, [
+                    hwID,
+                    'Test',
+                    classID,
+                    moment().add(3, 'days').format('dddd, MMMM Do YYYY, h:mm:ss a'),
+                    'Classroom',
+                    ['UpdateTestPerson1', 'UpdateTestPerson2', 'UpdateTestPerson3'],
+                    'UpdateToT',
+                ]);
+
+                const query = HW.find({ _id: hwID }).fetch();
+                assert.equal(query[0].alias, 'Test');
             });
 
             it('can complete hw', function() {

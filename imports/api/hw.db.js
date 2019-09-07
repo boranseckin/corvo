@@ -99,6 +99,26 @@ Meteor.methods({
 
         HW.update({ _id: hwID }, { $set: { [editField]: edit } });
     },
+    'hw.update'(hwID, alias, classID, dueDate, submitMethod, partners, description) {
+        check(hwID, Match._id);
+        check(alias, String);
+        check(classID, Match._id);
+        check(dueDate, Match.dueDate);
+        check(submitMethod, Match.submitMethod);
+        check(partners, Match.Optional([String]));
+        check(description, Match.Maybe(Match.description));
+
+        HW.update({ _id: hwID }, {
+            $set: {
+                alias,
+                classID,
+                dueDate,
+                submitMethod,
+                partners,
+                description,
+            },
+        });
+    },
     'hw.clear'() {
         HW.remove({});
     },
