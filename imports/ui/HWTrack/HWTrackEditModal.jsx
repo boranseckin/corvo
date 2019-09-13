@@ -106,7 +106,7 @@ const EditForm = Form.create({ name: 'editAssignmentForm' })(
             const { getFieldDecorator, getFieldValue } = form;
 
             const aliasConfig = {
-                rules: [{ required: true, message: 'Please input an alias for the assignment!' }],
+                rules: [{ required: true, message: 'Please input a name for the assignment!' }],
             };
 
             const subjectConfig = {
@@ -190,7 +190,7 @@ const EditForm = Form.create({ name: 'editAssignmentForm' })(
                 >
                     <Form {...formItemLayout} layout="horizontal" hideRequiredMark>
 
-                        <Form.Item label="Alias">
+                        <Form.Item label="Name">
                             {getFieldDecorator('alias', aliasConfig)(
                                 <Input autoFocus />,
                             )}
