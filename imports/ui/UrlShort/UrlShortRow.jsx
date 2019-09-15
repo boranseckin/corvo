@@ -28,12 +28,13 @@ export default class UrlShortRow extends Component {
         super(props);
 
         this.state = {
-            ip: Session.get('serverIP'),
         };
 
         this.handleRemove = this.handleRemove.bind(this);
         this.handleOpen = this.handleOpen.bind(this);
     }
+
+    componentDidMount
 
     handleRemove(event) {
         event.preventDefault();
@@ -47,7 +48,7 @@ export default class UrlShortRow extends Component {
         event.preventDefault();
 
         const { shortUrl } = this.props;
-        const { ip } = this.state;
+        const ip = Session.get('serverIP');
         const dynamicLink = `http://${ip}:3000/r/${shortUrl}`;
 
         window.open(dynamicLink);

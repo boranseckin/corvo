@@ -1,6 +1,9 @@
+/* eslint-disable meteor/no-session */
 import { Meteor } from 'meteor/meteor';
 import React, { Component } from 'react';
 import { withTracker } from 'meteor/react-meteor-data';
+import { Session } from 'meteor/session';
+import { Tracker } from 'meteor/tracker';
 import propTypes from 'prop-types';
 
 import URL from '../../api/url.db.js';
@@ -24,6 +27,14 @@ class UrlShort extends Component {
         this.state = {
 
         };
+    }
+
+    componentDidMount() {
+        Tracker.autorun(() => {
+            Meteor.call('ip', (error, result) => {
+                Session.set('serverIP', result.ip);
+            });
+        });
     }
 
     renderUrls() {
