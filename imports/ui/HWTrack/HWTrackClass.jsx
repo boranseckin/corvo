@@ -15,6 +15,8 @@ import {
     Popconfirm,
     Badge,
     message,
+    Typography,
+    Icon,
 } from 'antd';
 
 import HWTrackEditModal from './HWTrackEditModal.jsx';
@@ -22,6 +24,7 @@ import HWTrackEditModal from './HWTrackEditModal.jsx';
 import HWClass from '../../api/hw.class.db.js';
 import HW from '../../api/hw.db.js';
 
+const { Paragraph } = Typography;
 export default class HWTrackClass extends Component {
     static propTypes = {
         className: propTypes.string,
@@ -188,26 +191,31 @@ export default class HWTrackClass extends Component {
             this.createFormData();
             return (
                 <div>
-                    <p>
+                    <Paragraph>
                         <b>Class Code:</b>
                         &nbsp;
                         {currentClass.code}
-                    </p>
-                    <p>
+                        &nbsp;
+                        { currentClass.url
+                            ? <a href={currentClass.url} rel="noopener noreferrer" target="_blank"><Icon type="link" /></a>
+                            : <p />
+                        }
+                    </Paragraph>
+                    <Paragraph>
                         <b>Teacher:</b>
                         &nbsp;
                         {currentClass.teacher}
-                    </p>
-                    <p>
+                    </Paragraph>
+                    <Paragraph>
                         <b>Room Number:</b>
                         &nbsp;
                         {currentClass.room}
-                    </p>
-                    <p>
+                    </Paragraph>
+                    <Paragraph>
                         <b>Active Assignements:</b>
                         &nbsp;
                         {activeHW.length}
-                    </p>
+                    </Paragraph>
                     <br />
                     <Row>
                         <Col span={4} />
@@ -219,7 +227,7 @@ export default class HWTrackClass extends Component {
                                         <Descriptions.Item label="Partners" span={1}>{record.partners}</Descriptions.Item>
                                         <Descriptions.Item label="Submit Method" span={1}>{record.submitMethod}</Descriptions.Item>
                                         <Descriptions.Item label="Created At" span={1}>{record.createdAt}</Descriptions.Item>
-                                        <Descriptions.Item label="Description">{record.description}</Descriptions.Item>
+                                        <Descriptions.Item label="Description" span={3}>{record.description}</Descriptions.Item>
                                     </Descriptions>
                                 )}
                                 dataSource={this.data}
