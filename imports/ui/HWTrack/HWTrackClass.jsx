@@ -2,6 +2,7 @@
 import { Meteor } from 'meteor/meteor';
 import React, { Component } from 'react';
 import { Tracker } from 'meteor/tracker';
+import { FlowRouter } from 'meteor/kadira:flow-router';
 import propTypes from 'prop-types';
 import { moment } from 'meteor/momentjs:moment';
 
@@ -84,6 +85,12 @@ export default class HWTrackClass extends Component {
         this.setState({
             editHW: value.id,
         });
+    }
+
+    handleDeleteClass = () => {
+        const { currentClass } = this.state;
+        Meteor.call('hw.class.remove', currentClass._id);
+        FlowRouter.go('/hw/');
     }
 
     fixModal = () => {
@@ -236,6 +243,13 @@ export default class HWTrackClass extends Component {
                         </Col>
                         <Col span={4} />
                     </Row>
+                    <br />
+                    <Popconfirm
+                        title="Are you sure to delete this class? (ﾉﾟ0ﾟ)ﾉ~"
+                        onConfirm={this.handleDeleteClass}
+                    >
+                        <Button type="danger" icon="delete">Remove Class</Button>
+                    </Popconfirm>
                     <HWTrackEditModal
                         key={Math.random()}
                         editID={editHW}

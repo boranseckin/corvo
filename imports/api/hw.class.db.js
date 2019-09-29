@@ -21,17 +21,19 @@ Match._id = Match.Where((id) => {
 });
 
 Meteor.methods({
-    'hw.class.insert'(name, code, teacher, room) {
+    'hw.class.insert'(name, code, teacher, room, url) {
         check(name, String);
         check(code, String);
         check(teacher, String);
         check(room, Number);
+        check(url, String);
 
         HWClass.insert({
             name,
             code,
             teacher,
             room,
+            url,
         });
     },
     'hw.class.list'() {

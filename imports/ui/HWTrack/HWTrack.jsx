@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { withTracker } from 'meteor/react-meteor-data';
 import propTypes from 'prop-types';
 import {
-    Typography, Row,
+    Typography, Row, Col,
 } from 'antd';
 
 import HWClass from '../../api/hw.class.db.js';
@@ -11,6 +11,7 @@ import HWClass from '../../api/hw.class.db.js';
 import HWTrackBox from './HWTrackBox.jsx';
 import HWTrackClass from './HWTrackClass.jsx';
 import HWTrackAddModal from './HWTrackAddModal.jsx';
+import HWTrackAddClassModal from './HWTrackAddClassModal.jsx';
 
 const { Title } = Typography;
 
@@ -43,12 +44,13 @@ class HWTrack extends Component {
                 classCode={hwclass.code}
                 classTeacher={hwclass.teacher}
                 classRoom={hwclass.room}
+                classURL={hwClass.url}
             />
         ));
     }
 
     render() {
-        const { className } = this.props;
+        const { className, hwClass } = this.props;
         if (className === 'home') {
             return (
                 <div>
@@ -56,7 +58,17 @@ class HWTrack extends Component {
                         Homework Tracker
                     </Title>
 
-                    <HWTrackAddModal />
+                    <Row gutter={24}>
+                        <Col span={4} offset={8}>
+                            <HWTrackAddModal />
+                        </Col>
+                        <Col span={3}>
+                            { hwClass.length >= 4
+                                ? <HWTrackAddClassModal disabled classCount={hwClass.length} />
+                                : <HWTrackAddClassModal classCount={hwClass.length} />
+                            }
+                        </Col>
+                    </Row>
 
                     <br />
 
