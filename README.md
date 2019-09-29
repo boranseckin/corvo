@@ -75,6 +75,10 @@ meteor npm test
 ```
 To run the app in "test mode" and be able to edit it while testing, use this line instead:
 ```
+meteor npm run test-app
+```
+or
+```
 TEST_WATCH=1 meteor test --driver-package meteortesting:mocha
 ```
 
