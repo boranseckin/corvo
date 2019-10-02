@@ -29,16 +29,16 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.6.2",
-    "antd": "^3.23.4",
+    "antd": "^3.23.5",
     "classnames": "^2.2.6",
     "eslint-scope": "^5.0.0",
     "indexof": "0.0.1",
     "meteor-node-stubs": "^0.4.1",
     "npm": "^6.11.3",
-    "react": "^16.10.0",
+    "react": "^16.10.1",
     "react-alert": "^5.5.0",
     "react-alert-template-basic": "^1.0.0",
-    "react-dom": "^16.10.0",
+    "react-dom": "^16.10.1",
     "react-mounter": "^1.2.0",
     "react-scroll": "^1.7.14",
     "react-transition-group": "^4.3.0",
@@ -62,7 +62,7 @@
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-meteor": "^5.2.0",
-    "eslint-plugin-react": "^7.14.3",
+    "eslint-plugin-react": "^7.15.1",
     "tar": "^4.4.13"
   }
 }
