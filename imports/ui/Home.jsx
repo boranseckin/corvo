@@ -27,7 +27,7 @@ class Home extends Component {
                 </Paragraph>
                 <Paragraph>
                     The source code and the instructions can be found at
-                    {' '}
+                    &nbsp;
                     <a href="https://github.com/boranseckin/corvo">GitHub</a>
                     .
                 </Paragraph>
