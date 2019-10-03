@@ -351,4 +351,7 @@ lint/tmp/
 # MongoDB Dump
 dump/
 
+# Development API
+development.json
+
 # End of https://www.gitignore.io/api/node,meteor,meteorjs,reactnative,visualstudiocode
