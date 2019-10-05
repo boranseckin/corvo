@@ -2,11 +2,12 @@
 /* eslint-disable no-underscore-dangle */
 import { Meteor } from 'meteor/meteor';
 import React, { Component } from 'react';
+import { FlowRouter } from 'meteor/kadira:flow-router';
 import { Tracker } from 'meteor/tracker';
 import propTypes from 'prop-types';
 
 import {
-    Col, Row, Typography, Form, Input, Button, Icon,
+    Col, Row, Typography, Form, Input, Button, Icon, message,
 } from 'antd';
 
 const { Paragraph, Title } = Typography;
@@ -30,7 +31,18 @@ const SignupForm = Form.create({ name: 'signupForm' })(
             const { form } = this.props;
             form.validateFields((err, values) => {
                 if (!err) {
-                    Meteor.call('user.insert', values.username, values.email, values.password);
+                    Meteor.call('user.insert', values.username, values.email, values.password, (error) => {
+                        if (!error) {
+                            form.resetFields();
+                            message.success('You have been signed up successfully!', 2, () => {
+                                FlowRouter.go('/verify');
+                            });
+                        } else if (error.reason === 'Username already exists.') {
+                            message.error('This username is already exist, please try a different username!', 3);
+                        } else if (error.reason === 'Email already exists.') {
+                            message.error('This email is already registered for another account, please try a different email!', 3);
+                        }
+                    });
                 }
             });
         };
@@ -44,7 +56,7 @@ const SignupForm = Form.create({ name: 'signupForm' })(
         compareToFirstPassword = (rule, value, callback) => {
             const { form } = this.props;
             if (value && value !== form.getFieldValue('password')) {
-                callback('Two passwords that you enter is inconsistent!');
+                callback('Two passwords do not match!');
             } else {
                 callback();
             }
@@ -64,7 +76,7 @@ const SignupForm = Form.create({ name: 'signupForm' })(
             const { getFieldDecorator } = form;
             return (
                 <div>
-                    <Form onSubmit={this.handleSubmit} className="signup-form">
+                    <Form onSubmit={this.handleSubmit} className="signup-form" style={{ maxWidth: '300px' }}>
                         <Form.Item>
                             {getFieldDecorator('username', {
                                 rules: [{ required: true, message: 'Please input your username!' }],
@@ -78,7 +90,11 @@ const SignupForm = Form.create({ name: 'signupForm' })(
                         </Form.Item>
                         <Form.Item>
                             {getFieldDecorator('email', {
-                                rules: [{ required: true, message: 'Please input your email!' }],
+                                rules: [
+                                    { required: true, message: 'Please input your email!' },
+                                    { type: 'email', message: 'Please input a valid email!' },
+                                ],
+                                validateTrigger: 'onBlur',
                             })(
                                 <Input
                                     prefix={<Icon type="mail" style={{ color: 'rgba(0,0,0,.25)' }} />}
@@ -98,6 +114,7 @@ const SignupForm = Form.create({ name: 'signupForm' })(
                                         validator: this.validateToNextPassword,
                                     },
                                 ],
+                                validateTrigger: 'onBlur',
                             })(
                                 <Input.Password
                                     prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
@@ -117,6 +134,7 @@ const SignupForm = Form.create({ name: 'signupForm' })(
                                         validator: this.compareToFirstPassword,
                                     },
                                 ],
+                                validateTrigger: 'onBlur',
                             })(
                                 <Input.Password
                                     prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
@@ -127,9 +145,17 @@ const SignupForm = Form.create({ name: 'signupForm' })(
                             )}
                         </Form.Item>
                         <Form.Item>
-                            <Button type="primary" htmlType="submit" className="signup-form-button">
+                            <Button type="primary" htmlType="submit" className="signup-form-button" style={{ width: '95%' }}>
                                 Sign Up
                             </Button>
+                            <br />
+                            Do you already have an account?
+                            &nbsp;
+                            <a href="/login">
+                                Login
+                                {' '}
+                                <i className="material-icons" style={{ fontSize: '18px', verticalAlign: 'text-bottom' }}>launch</i>
+                            </a>
                         </Form.Item>
                     </Form>
                 </div>

@@ -1,12 +1,13 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable no-underscore-dangle */
 import { Meteor } from 'meteor/meteor';
 import React, { Component } from 'react';
+import RememberMe from 'meteor/tprzytula:remember-me';
+import { FlowRouter } from 'meteor/kadira:flow-router';
 import { Tracker } from 'meteor/tracker';
 import propTypes from 'prop-types';
 
 import {
-    Col, Row, Typography, Form, Input, Button, Icon,
+    Col, Row, Typography, Form, Input, Button, Icon, Checkbox, message,
 } from 'antd';
 
 const { Paragraph, Title } = Typography;
@@ -23,12 +24,22 @@ const LoginForm = Form.create({ name: 'loginForm' })(
 
         handleSubmit = (e) => {
             e.preventDefault();
+
             const { form } = this.props;
+
+
             form.validateFields((err, values) => {
                 if (!err) {
-                    Meteor.loginWithPassword(values.username, values.password, () => {
-                        form.resetFields();
-                    });
+                    RememberMe.loginWithPassword(values.username, values.password, (error) => {
+                        if (!error) {
+                            form.resetFields();
+                            message.success('You have been logged in!', 2, () => {
+                                FlowRouter.go('/hw');
+                            });
+                        } else if (error.error === 403) {
+                            message.error('Username or password is incorrect, please try again!');
+                        }
+                    }, values.remember);
                 }
             });
         };
@@ -38,7 +49,7 @@ const LoginForm = Form.create({ name: 'loginForm' })(
             const { getFieldDecorator } = form;
             return (
                 <div>
-                    <Form onSubmit={this.handleSubmit} className="login-form">
+                    <Form onSubmit={this.handleSubmit} className="login-form" style={{ maxWidth: '300px' }}>
                         <Form.Item>
                             {getFieldDecorator('username', {
                                 rules: [{ required: true, message: 'Please input your username!' }],
@@ -63,9 +74,22 @@ const LoginForm = Form.create({ name: 'loginForm' })(
                             )}
                         </Form.Item>
                         <Form.Item>
-                            <Button type="primary" htmlType="submit" className="login-form-button">
+                            {getFieldDecorator('remember', {
+                                valuePropName: 'checked',
+                                initialValue: true,
+                            })(<Checkbox style={{ float: 'left' }}>Remember me</Checkbox>)}
+                            <a href="/forgot-password" style={{ float: 'right' }}>Forgot password?</a>
+                            <Button type="primary" htmlType="submit" className="login-form-button" style={{ width: '100%' }}>
                                 Log in
                             </Button>
+                            <br />
+                            You don&apos;t have an account?
+                            &nbsp;
+                            <a href="/signup">
+                                Register
+                                {' '}
+                                <i className="material-icons" style={{ fontSize: '18px', verticalAlign: 'text-bottom' }}>launch</i>
+                            </a>
                         </Form.Item>
                     </Form>
                 </div>
@@ -97,11 +121,11 @@ export default class Login extends Component {
             <div>
                 <Title>Login</Title>
                 <Row gutter={24}>
-                    <Col span={10} />
-                    <Col span={4}>
+                    <Col span={9} />
+                    <Col span={6}>
                         <LoginForm />
                     </Col>
-                    <Col span={10} />
+                    <Col span={9} />
                 </Row>
                 <Paragraph>
                     {user === null ? 'None' : user}
