@@ -5,7 +5,7 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 import propTypes from 'prop-types';
 
 import {
-    Result, Button, Input, message, Icon,
+    Result, message, Icon,
 } from 'antd';
 
 export default class Verify extends Component {
@@ -23,12 +23,8 @@ export default class Verify extends Component {
         super(props);
 
         this.state = {
-            inputVal: '',
             pending: true,
         };
-
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     componentDidMount() {
@@ -62,21 +58,8 @@ export default class Verify extends Component {
         Meteor.call('user.sendVerificationEmail', userId);
     }
 
-    handleChange(e) {
-        this.setState({
-            inputVal: e.target.value,
-        });
-    }
-
-    handleSubmit(e) {
-        e.preventDefault();
-
-        const { inputVal } = this.state;
-        console.log(inputVal);
-    }
-
     render() {
-        const { inputVal, pending } = this.state;
+        const { pending } = this.state;
         if (pending) {
             return (
                 <div>
@@ -84,11 +67,7 @@ export default class Verify extends Component {
                         icon={<Icon type="loading" />}
                         status="info"
                         title="Waiting for e-mail verification!"
-                        subTitle="Please verify your e-mail address by entering the code below or directly clicking the link."
-                        extra={[
-                            <Input value={inputVal} onPressEnter={this.handleSubmit} onChange={this.handleChange} style={{ maxWidth: '150px' }} />,
-                            <Button type="primary" onClick={this.handleSubmit} key="verify">Verify</Button>,
-                        ]}
+                        subTitle="Please verify your e-mail address by clicking the link in the email we have sent you."
                     />
                 </div>
             );

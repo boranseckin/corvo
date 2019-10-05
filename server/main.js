@@ -8,7 +8,25 @@ import '../imports/api/hw.db.js';
 import '../imports/api/hw.class.db.js';
 
 Meteor.startup(() => {
-    Accounts.emailTemplates.from = 'Corvo Verify <verify@boranseckin.com>';
     Accounts.config({ loginExpirationInDays: 30 });
+
+    Accounts.emailTemplates.from = 'Corvo Verify <no-reply@boranseckin.com>';
+
+    Accounts.urls.verifyEmail = function (token) {
+        return Meteor.absoluteUrl(`verify/token/${token}`);
+    };
+
+    Accounts.emailTemplates.verifyEmail = {
+        subject() {
+            return 'Welcome to Corvo!';
+        },
+        text(user, url) {
+            return `Hello ${user.username},\n\n`
+            + 'To verify your account, simply click the link below:\n\n'
+            + `<a href=${url}>Click here to verify!<a/>\n\n`
+            + 'Thanks.';
+        },
+    };
+
     process.env.MAIL_URL = Meteor.settings.mail.smtp;
 });
