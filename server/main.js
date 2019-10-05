@@ -9,5 +9,6 @@ import '../imports/api/hw.class.db.js';
 
 Meteor.startup(() => {
     Accounts.emailTemplates.from = 'Corvo Verify <verify@boranseckin.com>';
+    Accounts.config({ loginExpirationInDays: 30 });
     process.env.MAIL_URL = Meteor.settings.mail.smtp;
 });
