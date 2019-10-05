@@ -8,10 +8,17 @@ Meteor.methods({
         check(email, String);
         check(password, String);
 
-        Accounts.createUser({
+        const user = Accounts.createUser({
             username,
             email,
             password,
         });
+
+        return user;
+    },
+    'user.sendVerificationEmail'(userId) {
+        check(userId, String);
+
+        Accounts.sendVerificationEmail(userId);
     },
 });

@@ -31,11 +31,12 @@ const SignupForm = Form.create({ name: 'signupForm' })(
             const { form } = this.props;
             form.validateFields((err, values) => {
                 if (!err) {
-                    Meteor.call('user.insert', values.username, values.email, values.password, (error) => {
+                    Meteor.call('user.insert', values.username, values.email, values.password, (error, result) => {
                         if (!error) {
                             form.resetFields();
+
                             message.success('You have been signed up successfully!', 2, () => {
-                                FlowRouter.go('/verify');
+                                FlowRouter.go(`/verify/${result}`);
                             });
                         } else if (error.reason === 'Username already exists.') {
                             message.error('This username is already exist, please try a different username!', 3);
