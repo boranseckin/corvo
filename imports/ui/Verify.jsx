@@ -24,6 +24,7 @@ export default class Verify extends Component {
 
         this.state = {
             pending: true,
+            notFound: false,
         };
     }
 
@@ -55,12 +56,25 @@ export default class Verify extends Component {
     sendVerificationEmail() {
         const { userId } = this.props;
 
-        Meteor.call('user.sendVerificationEmail', userId);
+        if (userId !== 'reminder') {
+            Meteor.call('user.sendVerificationEmail', userId, (error) => {
+                if (error) {
+                    if (error.reason === 'Can\'t find user') {
+                        this.setState({ notFound: true });
+                    } else if (error.reason === 'That user has no unverified email addresses.') {
+                        this.setState({ pending: false });
+                        setTimeout(() => {
+                            FlowRouter.go('/hw');
+                        }, 2000);
+                    }
+                }
+            });
+        }
     }
 
     render() {
-        const { pending } = this.state;
-        if (pending) {
+        const { pending, notFound } = this.state;
+        if (pending && !notFound) {
             return (
                 <div>
                     <Result
@@ -68,6 +82,24 @@ export default class Verify extends Component {
                         status="info"
                         title="Waiting for e-mail verification!"
                         subTitle="Please verify your e-mail address by clicking the link in the email we have sent you."
+                    />
+                </div>
+            );
+        }
+        if (notFound) {
+            return (
+                <div>
+                    <Result
+                        status="error"
+                        title="This user not exist!"
+                        subTitle="Please sign up to get a verification email."
+                        extra={(
+                            <a href="/signup">
+                                Sign up
+                                {' '}
+                                <i className="material-icons" style={{ fontSize: '18px', verticalAlign: 'text-bottom' }}>launch</i>
+                            </a>
+                        )}
                     />
                 </div>
             );
