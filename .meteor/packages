@@ -26,3 +26,5 @@ http
 session
 xolvio:cleaner
 momentjs:moment
+accounts-password
+tprzytula:remember-me

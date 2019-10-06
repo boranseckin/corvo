@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { FlowRouter } from 'meteor/kadira:flow-router';
 import propTypes from 'prop-types';
 import { positions, Provider as AlertProvider } from 'react-alert';
 import AlertTemplate from 'react-alert-template-basic';
@@ -33,10 +32,8 @@ export default class App extends Component {
         return (
             <div>
                 <center>
-                    <Navbar
-                        currentPath={FlowRouter.current().route.path}
-                    />
-
+                    <Navbar />
+                    <br />
                     <div>
                         <AlertProvider template={AlertTemplate} {...option}>
                             <div id="content">
