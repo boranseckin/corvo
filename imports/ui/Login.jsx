@@ -1,4 +1,3 @@
-/* eslint-disable no-underscore-dangle */
 import { Meteor } from 'meteor/meteor';
 import React, { Component } from 'react';
 import RememberMe from 'meteor/tprzytula:remember-me';

@@ -10,10 +10,26 @@ import '../imports/api/hw.class.db.js';
 Meteor.startup(() => {
     Accounts.config({ loginExpirationInDays: 30 });
 
-    Accounts.emailTemplates.from = 'Corvo Verify <no-reply@boranseckin.com>';
+    Accounts.emailTemplates.from = 'Corvo Account Manager <no-reply@boranseckin.com>';
+
+    Accounts.urls.resetPassword = function (token) {
+        return Meteor.absoluteUrl(`reset-password/token/${token}`);
+    };
 
     Accounts.urls.verifyEmail = function (token) {
         return Meteor.absoluteUrl(`verify/token/${token}`);
+    };
+
+    Accounts.emailTemplates.resetPassword = {
+        subject() {
+            return 'Welcome to Corvo!';
+        },
+        text(user, url) {
+            return `Hello ${user.username},\n\n`
+            + 'To recover your account, simply click the link below:\n\n'
+            + `${url}\n\n`
+            + 'Thanks.';
+        },
     };
 
     Accounts.emailTemplates.verifyEmail = {
