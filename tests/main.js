@@ -3,7 +3,6 @@
 import { Meteor } from 'meteor/meteor';
 import assert from 'assert';
 import '../imports/api/db.tests.js';
-import '../imports/api/user.tests.js';
 import '../imports/api/url.db.tests.js';
 import '../imports/api/hw.db.tests.js';
 import '../imports/api/hw.class.db.tests.js';
