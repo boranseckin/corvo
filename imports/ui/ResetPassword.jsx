@@ -178,6 +178,7 @@ export default class ResetPassword extends Component {
         Accounts.resetPassword(token, password, (error) => {
             if (!error) {
                 this.setState({ success: true });
+                Accounts.logoutOtherClients();
                 setTimeout(() => {
                     FlowRouter.go('/login');
                 }, 2000);
