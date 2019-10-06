@@ -44,5 +44,7 @@ Meteor.startup(() => {
         },
     };
 
-    process.env.MAIL_URL = Meteor.settings.mail.smtp;
+    if (Meteor.settings.mail) {
+        process.env.MAIL_URL = Meteor.settings.mail.smtp;
+    }
 });
