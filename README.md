@@ -32,7 +32,7 @@ curl https://install.meteor.com/ | sh
 ```
 To make sure it is installed, you can run:
 ```
-meteor -version
+meteor --version
 ```
 
 ### Installing
