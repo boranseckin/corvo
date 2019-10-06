@@ -23,7 +23,7 @@ Meteor.startup(() => {
         text(user, url) {
             return `Hello ${user.username},\n\n`
             + 'To verify your account, simply click the link below:\n\n'
-            + `<a href="${url}">Click here to verify!</a>\n\n`
+            + `${url}\n\n`
             + 'Thanks.';
         },
     };
