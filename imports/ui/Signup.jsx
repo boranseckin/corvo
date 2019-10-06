@@ -1,16 +1,13 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
-/* eslint-disable no-underscore-dangle */
 import { Meteor } from 'meteor/meteor';
 import React, { Component } from 'react';
 import { FlowRouter } from 'meteor/kadira:flow-router';
-import { Tracker } from 'meteor/tracker';
 import propTypes from 'prop-types';
 
 import {
     Col, Row, Typography, Form, Input, Button, Icon, message,
 } from 'antd';
 
-const { Paragraph, Title } = Typography;
+const { Title } = Typography;
 
 const SignupForm = Form.create({ name: 'signupForm' })(
     class extends React.Component {
@@ -170,20 +167,10 @@ export default class Signup extends Component {
         super(props);
 
         this.state = {
-            user: null,
         };
     }
 
-    componentDidMount() {
-        Tracker.autorun(() => {
-            this.setState({
-                user: Meteor.userId(),
-            });
-        });
-    }
-
     render() {
-        const { user } = this.state;
         return (
             <div>
                 <Title>Sign Up</Title>
@@ -194,9 +181,6 @@ export default class Signup extends Component {
                     </Col>
                     <Col span={9} />
                 </Row>
-                <Paragraph>
-                    {user === null ? 'None' : user}
-                </Paragraph>
             </div>
         );
     }
