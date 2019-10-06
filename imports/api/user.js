@@ -37,7 +37,7 @@ Meteor.methods({
         const expire = Accounts._getPasswordResetTokenLifetimeMs();
         const { when } = user.services.password.reset;
 
-        if (moment().diff(moment(when), 'minutes') > expire) {
+        if (moment().diff(moment(when), 'ms') > expire) {
             throw new Meteor.Error(403, 'Token is expired!');
         }
     },
