@@ -1,48 +1,92 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
+import { Meteor } from 'meteor/meteor';
 import React, { Component } from 'react';
-import { withTracker } from 'meteor/react-meteor-data';
-import propTypes from 'prop-types';
+import { FlowRouter } from 'meteor/kadira:flow-router';
+import { Tracker } from 'meteor/tracker';
 
-class Navbar extends Component {
-    static propTypes = {
-        currentPath: propTypes.string.isRequired,
-    }
+import { Menu, Icon } from 'antd';
 
+const { SubMenu } = Menu;
+
+export default class Navbar extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
+            current: FlowRouter.getRouteName(),
+            user: null,
         };
+
+        this.handleClick = this.handleClick.bind(this);
+    }
+
+    componentDidMount() {
+        Tracker.autorun(() => {
+            this.setState({
+                user: Meteor.user(),
+                current: FlowRouter.getRouteName(),
+            });
+        });
+    }
+
+    handleClick(e) {
+        this.setState({ current: e.key });
     }
 
     render() {
-        const { currentPath } = this.props;
+        const { current, user } = this.state;
+        if (user) {
+            return (
+                <div>
+                    <Menu onClick={this.handleClick} selectedKeys={[current]} mode="horizontal" style={{ display: 'flex' }}>
+                        <Menu.Item key="home">
+                            <a href="/" style={{ textDecoration: 'none' }}>Home</a>
+                        </Menu.Item>
+                        <Menu.Item key="hw">
+                            <a href="/hw" style={{ textDecoration: 'none' }}>HW Tracker</a>
+                        </Menu.Item>
+                        <Menu.Item key="url">
+                            <a href="/url" style={{ textDecoration: 'none' }}>URL Shortener</a>
+                        </Menu.Item>
+                        <SubMenu
+                            title={(
+                                <span className="submenu-title-wrapper">
+                                    <Icon type="user" />
+                                    {user.username}
+                                </span>
+                            )}
+                            style={{ marginLeft: 'auto' }}
+                        >
+                            <Menu.Item key="logout">
+                                <a href="/logout" style={{ textDecoration: 'none' }}>
+                                    <Icon type="logout" />
+                                    Logout
+                                </a>
+                            </Menu.Item>
+                        </SubMenu>
+                    </Menu>
+                </div>
+            );
+        }
         return (
             <div>
-                <nav id="navbar" className="navbar navbar-expand-md navbar-light bg-white">
-                    <ul className="navbar-nav mx-auto">
-                        <li className="nav-item">
-                            <a className="nav-link"><hr id="hr" width="75" /></a>
-                        </li>
-                        <li className={currentPath === '/' ? 'nav-item active' : 'nav-item'}>
-                            <a className="nav-link" href="/">Home</a>
-                        </li>
-                        <li className={currentPath.startsWith('/hw') ? 'nav-item active' : 'nav-item'}>
-                            <a className="nav-link" href="/hw/">HW Tracker</a>
-                        </li>
-                        <li className={currentPath === '/url' ? 'nav-item active' : 'nav-item'}>
-                            <a className="nav-link" href="/url">URL Shortener</a>
-                        </li>
-                        <li className="nav-item">
-                            <a className="nav-link"><hr id="hr" width="75" /></a>
-                        </li>
-                    </ul>
-                </nav>
+                <Menu onClick={this.handleClick} selectedKeys={[current]} mode="horizontal" style={{ display: 'flex' }}>
+                    <Menu.Item key="home">
+                        <a href="/" style={{ textDecoration: 'none' }}>Home</a>
+                    </Menu.Item>
+                    <Menu.Item key="hw">
+                        <a href="/hw" style={{ textDecoration: 'none' }}>HW Tracker</a>
+                    </Menu.Item>
+                    <Menu.Item key="url">
+                        <a href="/url" style={{ textDecoration: 'none' }}>URL Shortener</a>
+                    </Menu.Item>
+                    <Menu.Item key="signup" style={{ marginLeft: 'auto' }}>
+                        <a href="/signup" style={{ textDecoration: 'none' }}>Sign up</a>
+                    </Menu.Item>
+                    <Menu.Item key="login">
+                        <a href="/login" style={{ textDecoration: 'none' }}>Login</a>
+                    </Menu.Item>
+                </Menu>
             </div>
         );
     }
 }
-
-export default withTracker(() => ({
-
-}))(Navbar);
