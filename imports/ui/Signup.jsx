@@ -33,7 +33,7 @@ const SignupForm = Form.create({ name: 'signupForm' })(
                             form.resetFields();
                             FlowRouter.go(`/verify/${result}`);
                         } else if (error.reason === 'Username already exists.') {
-                            message.error('This username is already exist, please try a different username!', 3);
+                            message.error('This username already exists, please try a different username!', 3);
                         } else if (error.reason === 'Email already exists.') {
                             message.error('This email is already registered for another account, please try a different email!', 3);
                         }
