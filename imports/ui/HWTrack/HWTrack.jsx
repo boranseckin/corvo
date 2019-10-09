@@ -1,7 +1,11 @@
+/* eslint-disable no-underscore-dangle */
 import { Meteor } from 'meteor/meteor';
 import React, { Component } from 'react';
 import { withTracker } from 'meteor/react-meteor-data';
+import { Tracker } from 'meteor/tracker';
+import { FlowRouter } from 'meteor/kadira:flow-router';
 import propTypes from 'prop-types';
+
 import {
     Typography, Row, Col,
 } from 'antd';
@@ -31,6 +35,15 @@ class HWTrack extends Component {
 
         this.state = {
         };
+    }
+
+    componentDidMount() {
+        Tracker.autorun(() => {
+            const user = Meteor.user();
+            if (user && !user.emails[0].verified) {
+                FlowRouter._page.replace('/verify/reminder');
+            }
+        });
     }
 
     renderClassBox() {
