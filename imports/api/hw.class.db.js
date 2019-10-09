@@ -26,7 +26,7 @@ Meteor.methods({
         check(code, String);
         check(teacher, String);
         check(room, Number);
-        check(url, String);
+        check(url, Match.Maybe(String));
 
         HWClass.insert({
             name,
