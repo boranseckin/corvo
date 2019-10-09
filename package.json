@@ -32,7 +32,7 @@
     "antd": "^3.23.5",
     "bcrypt": "^3.0.6",
     "browserslist": "^4.7.0",
-    "caniuse-lite": "^1.0.30000999",
+    "caniuse-lite": "1.0.30000999",
     "classnames": "^2.2.6",
     "eslint-scope": "^5.0.0",
     "indexof": "0.0.1",
