@@ -79,7 +79,7 @@ const CreateForm = Form.create({ name: 'newClassForm' })(
                     okText="Submit"
                 >
 
-                    <Form {...formItemLayout} layout="horizontal" hideRequiredMark>
+                    <Form {...formItemLayout} layout="horizontal">
 
                         <Form.Item label="Name">
                             {getFieldDecorator('name', nameConfig)(
@@ -87,23 +87,23 @@ const CreateForm = Form.create({ name: 'newClassForm' })(
                             )}
                         </Form.Item>
                         <Row gutter={24}>
-                            <Col span={10} style={{ marginLeft: '14%', paddingRight: '0px' }}>
+                            <Col span={10} style={{ marginLeft: '14.5%', paddingRight: '0px', paddingLeft: '0px' }}>
                                 <Form.Item label="Code">
                                     {getFieldDecorator('code', codeConfig)(
-                                        <Input style={{ width: '110px' }} />,
+                                        <Input style={{ width: '110px', marginLeft: '6.5px' }} />,
                                     )}
                                 </Form.Item>
                             </Col>
                             <Col span={10} style={{ paddingLeft: '0px' }}>
-                                <Form.Item label="Room">
+                                <Form.Item label="Room" style={{ right: '5px' }}>
                                     {getFieldDecorator('room', roomConfig)(
-                                        <Input style={{ width: '110px' }} />,
+                                        <Input style={{ width: '110px', left: '13.5px' }} />,
                                     )}
                                 </Form.Item>
                             </Col>
                         </Row>
 
-                        <Form.Item label="Teacher's Name">
+                        <Form.Item label="Teacher">
                             {getFieldDecorator('teacher', teacherConfig)(
                                 <Input />,
                             )}
