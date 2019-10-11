@@ -64,7 +64,7 @@ class UrlShort extends Component {
                 <br />
                 <p>
                     Create your shortened url! Then use&nbsp;
-                    <i>boranseckin.com/r/(Shortened URL)</i>
+                    <i>corvoapp.com/r/(Shortened URL)</i>
                     .
                 </p>
                 <UrlShortForm />
