@@ -280,7 +280,7 @@ export default class HWTrackModal extends Component {
     };
 
     returnClass = () => {
-        Meteor.call('hw.class.list', (error, result) => {
+        Meteor.call('hw.class.list', Meteor.userId(), (error, result) => {
             this.setState({ classList: result });
         });
     }

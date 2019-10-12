@@ -55,10 +55,17 @@ export default class HWTrackClass extends Component {
             Meteor.subscribe('hwClassOne', className);
             Meteor.subscribe('hws');
 
-            const currentClass = HWClass.find({ name: className }).fetch()[0];
+            const currentClass = HWClass.find({
+                name: className,
+                userID: Meteor.userId(),
+            }).fetch()[0];
 
             if (currentClass) {
-                const activeHW = HW.find({ classID: currentClass._id, isCompleted: false }).fetch();
+                const activeHW = HW.find({
+                    classID: currentClass._id,
+                    userID: Meteor.userId(),
+                    isCompleted: false,
+                }).fetch();
                 this.setState({
                     currentClass,
                     activeHW,

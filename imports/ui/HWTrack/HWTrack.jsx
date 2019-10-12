@@ -108,6 +108,6 @@ class HWTrack extends Component {
 export default withTracker(() => {
     Meteor.subscribe('hwClass');
     return {
-        hwClass: HWClass.find({}).fetch(),
+        hwClass: HWClass.find({ userID: Meteor.userId() }).fetch(),
     };
 })(HWTrack);

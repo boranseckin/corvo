@@ -347,7 +347,7 @@ class HWTrackEditModal extends Component {
     };
 
     returnClass = () => {
-        Meteor.call('hw.class.list', (error, result) => {
+        Meteor.call('hw.class.list', Meteor.userId(), (error, result) => {
             this.setState({ classList: result });
         });
     }
@@ -377,6 +377,6 @@ class HWTrackEditModal extends Component {
 export default withTracker(() => {
     Meteor.subscribe('hws');
     return {
-        hws: HW.find({}).fetch(),
+        hws: HW.find({ userID: Meteor.userId() }).fetch(),
     };
 })(HWTrackEditModal);
