@@ -2,6 +2,10 @@
 
 Corvo is a web application development playground of mine. I am trying to develope different apps that would enhance some of the basic stuff I do regularly. You might think now, there are really good products already on the market that would the job, why bother... Well, I like programming and I want to get better at it. I also don't like watching tutorials for hours and copying their work. I learn best when I try and most importantly struggle. Therefore, I am doing things in my way and hopefully, one day, I can develope an app that would be best on the market.
 
+The project is hosted at [https://corvoapp.com](https://corvoapp.com).
+
+If you would like to check it out either singup or use the username ```test``` and password ```password```.
+
 ## Contents
 
 - [HW Tracker](#hw-tracker)
@@ -34,6 +38,7 @@ To make sure it is installed, you can run:
 ```
 meteor --version
 ```
+
 
 ### Installing
 
