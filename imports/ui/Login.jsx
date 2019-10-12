@@ -30,7 +30,7 @@ const LoginForm = Form.create({ name: 'loginForm' })(
                     RememberMe.loginWithPassword(values.username, values.password, (error) => {
                         if (!error) {
                             form.resetFields();
-                            FlowRouter.go('/hw');
+                            FlowRouter.go('/home');
                         } else if (error.error === 403) {
                             message.error('Username or password is incorrect, please try again!');
                         }
