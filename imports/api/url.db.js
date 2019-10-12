@@ -1,7 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
 import { check } from 'meteor/check';
-import { HTTP } from 'meteor/http';
 
 const URL = new Mongo.Collection('url');
 
@@ -9,11 +8,6 @@ if (Meteor.isServer) {
     Meteor.publish('urls', function urlPublication() {
         return URL.find();
     });
-}
-
-function isUrl(s) {
-    const regexp = /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,}|[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,})/;
-    return regexp.test(s);
 }
 
 function creatUrl(length) {
@@ -33,12 +27,6 @@ Meteor.methods({
         check(name, String);
         check(duration, String);
 
-        if (!realUrl) {
-            throw new Meteor.Error('No URL is submitted!');
-        } else if (!isUrl(realUrl)) {
-            throw new Meteor.Error('URL is not valid!');
-        }
-
         const shortUrl = creatUrl(5);
         let expire;
 
@@ -57,6 +45,7 @@ Meteor.methods({
             duration,
             createdAt: new Date(),
             expireAt: expire,
+            userID: Meteor.userId(),
         });
     },
     'url.remove'(urlID) {
@@ -67,10 +56,6 @@ Meteor.methods({
     'url.clear'() {
         URL.remove({});
     },
-    'ip'() {
-        return HTTP.get('https://json.geoiplookup.io/').data;
-    },
-
 });
 
 export default URL;
