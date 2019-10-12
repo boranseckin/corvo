@@ -1,7 +1,5 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import { Meteor } from 'meteor/meteor';
 import React, { Component } from 'react';
-import { withAlert } from 'react-alert';
 import propTypes from 'prop-types';
 
 import {
@@ -10,126 +8,113 @@ import {
 
 const { Option } = Select;
 
-class UrlShortForm extends Component {
+class URLCreateForm extends Component {
     static propTypes = {
-        alert: propTypes.objectOf(propTypes.any),
-    };
+        form: propTypes.objectOf(propTypes.any),
+    }
 
     static defaultProps = {
-        alert: propTypes.objectOf(propTypes.any),
-    };
-
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            inputUrlValue: '',
-            inputNameValue: '',
-            inputDurationValue: '1h',
-        };
-
-        this.handleUrlChange = this.handleUrlChange.bind(this);
-        this.handleNameChange = this.handleNameChange.bind(this);
-        this.handleDurationChange = this.handleDurationChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
+        form: propTypes.objectOf(propTypes.any),
     }
 
-    handleUrlChange(event) {
-        this.setState({ inputUrlValue: event.target.value });
-    }
-
-    handleNameChange(event) {
-        this.setState({ inputNameValue: event.target.value });
-    }
-
-    handleDurationChange(event) {
-        this.setState({ inputDurationValue: event });
-    }
-
-    handleSubmit(event) {
-        event.preventDefault();
-
-        const { alert } = this.props;
-        const { inputNameValue, inputDurationValue } = this.state;
-        let { inputUrlValue } = this.state;
-
-        const regexp = /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,}|[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,})/;
-
-        alert.remove(this.warn);
-
-        if (!inputUrlValue) {
-            this.warn = alert.info('URL is missing');
-            return;
-        }
-
-        if (!regexp.test(inputUrlValue)) {
-            this.warn = alert.info('URL is not valid');
-            return;
-        }
-
-        if (!inputUrlValue.startsWith('http')) {
-            inputUrlValue = `http://${inputUrlValue}`;
-        }
-
-        if (!inputNameValue) {
-            this.warn = alert.info('Name is missing');
-            return;
-        }
-
-        if (!inputDurationValue || inputDurationValue === 'Duration...') {
-            this.warn = alert.info('Select a duration!');
-            return;
-        }
-
-        Meteor.call('url.insert', inputUrlValue, inputNameValue, inputDurationValue);
-
-        this.clearForm();
-    }
-
-    clearForm() {
-        this.setState({
-            inputUrlValue: '',
-            inputNameValue: '',
+    handleSubmit = (e) => {
+        e.preventDefault();
+        const { form } = this.props;
+        form.validateFields((err, values) => {
+            if (err) {
+                return;
+            }
+            Meteor.call('url.insert', values.url, values.name, values.duration);
         });
     }
 
     render() {
-        const { inputUrlValue, inputNameValue } = this.state;
+        const { form } = this.props;
+        const {
+            getFieldDecorator,
+            getFieldError,
+            isFieldTouched,
+        } = form;
+
+        const urlError = isFieldTouched('url') && getFieldError('url');
+        const nameError = isFieldTouched('name') && getFieldError('name');
+
+        const urlConfig = {
+            rules: [{ required: true, type: 'url', message: 'Please input a valid URL!' }],
+            validateTrigger: 'onBlur',
+        };
+
+        const nameConfig = {
+            rules: [{ required: true, message: 'Please input a name!' }],
+            validateTrigger: 'onBlur',
+        };
+
+        const durationConfig = {
+            rules: [{
+                required: true,
+                message: 'Please select a duration!',
+            }],
+            validateTrigger: 'onBlur',
+        };
+
         return (
-            <div>
-                <Form layout="inline" onSubmit={this.handleSubmit}>
-                    <Row type="flex" justify="center">
-                        <Col span={10}>
-                            <Form.Item>
-                                <Input type="text" id="url-input" placeholder="URL" value={inputUrlValue} onChange={this.handleUrlChange} />
-                            </Form.Item>
-                        </Col>
-                        <Col span={8}>
-                            <Form.Item>
-                                <Input type="text" id="name-input" placeholder="Name" value={inputNameValue} onChange={this.handleNameChange} />
-                            </Form.Item>
-                        </Col>
-                        <Col span={4}>
-                            <Form.Item>
-                                <Select defaultValue="1h" id="dur-select" style={{ width: 120 }} onChange={this.handleDurationChange}>
+            <Form layout="inline" onSubmit={this.handleSubmit}>
+                <Row gutter={24}>
+                    <Col span={12}>
+                        <Form.Item validateStatus={urlError ? 'error' : ''} help={urlError || ''}>
+                            {getFieldDecorator('url', urlConfig)(
+                                <Input
+                                    placeholder="URL"
+                                />,
+                            )}
+                        </Form.Item>
+                    </Col>
+                    <Col span={7}>
+                        <Form.Item validateStatus={nameError ? 'error' : ''} help={nameError || ''}>
+                            {getFieldDecorator('name', nameConfig)(
+                                <Input
+                                    placeholder="Name"
+                                />,
+                            )}
+                        </Form.Item>
+                    </Col>
+                    <Col span={3}>
+                        <Form.Item>
+                            {getFieldDecorator('duration', durationConfig)(
+                                <Select placeholder="Duration">
                                     <Option value="1h">1h</Option>
                                     <Option value="24h">24h</Option>
                                     <Option value="Unlimited">Unlimited</Option>
-                                </Select>
-                            </Form.Item>
-                        </Col>
-                        <Col span={2}>
-                            <Form.Item>
-                                <Button type="primary" onClick={this.handleSubmit}>
-                                    <i id="icon" className="material-icons">add</i>
-                                </Button>
-                            </Form.Item>
-                        </Col>
-                    </Row>
-                </Form>
-            </div>
+                                </Select>,
+                            )}
+                        </Form.Item>
+                    </Col>
+                    <Col span={2}>
+                        <Form.Item>
+                            <Button type="primary" onClick={this.handleSubmit}>
+                                <i id="icon" className="material-icons">add</i>
+                            </Button>
+                        </Form.Item>
+                    </Col>
+                </Row>
+            </Form>
         );
     }
 }
 
-export default withAlert()(UrlShortForm);
+const URLForm = Form.create({ name: 'url_add' })(URLCreateForm);
+
+export default class UrlShortForm extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+        };
+    }
+
+    render() {
+        return (
+            <URLForm />
+        );
+    }
+}
