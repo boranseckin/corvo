@@ -55,6 +55,10 @@ Meteor.methods({
         check(partners, Match.Optional([String]));
         check(description, Match.Maybe(Match.description));
 
+        if (!Meteor.userId()) {
+            throw new Meteor.Error('User not logged in!');
+        }
+
         HW.insert({
             alias,
             classID,
@@ -64,15 +68,24 @@ Meteor.methods({
             partners,
             description,
             isCompleted: false,
+            userID: Meteor.userId(),
         });
     },
     'hw.remove'(hwID) {
         check(hwID, Match._id);
 
+        if (!Meteor.userId()) {
+            throw new Meteor.Error('User not logged in!');
+        }
+
         HW.remove(hwID);
     },
     'hw.complete'(hwID) {
         check(hwID, Match._id);
+
+        if (!Meteor.userId()) {
+            throw new Meteor.Error('User not logged in!');
+        }
 
         HW.update({ _id: hwID }, { $set: { isCompleted: true } });
     },
@@ -80,6 +93,10 @@ Meteor.methods({
         check(hwID, Match._id);
         check(editField, String);
         check(edit, Match.Any);
+
+        if (!Meteor.userId()) {
+            throw new Meteor.Error('User not logged in!');
+        }
 
         if (editField === 'alias') {
             check(edit, String);
@@ -108,6 +125,10 @@ Meteor.methods({
         check(partners, Match.Optional([String]));
         check(description, Match.Maybe(Match.description));
 
+        if (!Meteor.userId()) {
+            throw new Meteor.Error('User not logged in!');
+        }
+
         HW.update({ _id: hwID }, {
             $set: {
                 alias,
@@ -120,6 +141,10 @@ Meteor.methods({
         });
     },
     'hw.clear'() {
+        if (!Meteor.userId()) {
+            throw new Meteor.Error('User not logged in!');
+        }
+
         HW.remove({});
     },
 });

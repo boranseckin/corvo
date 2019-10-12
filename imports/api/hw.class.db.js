@@ -28,16 +28,23 @@ Meteor.methods({
         check(room, Number);
         check(url, Match.Maybe(String));
 
+        if (!Meteor.userId()) {
+            throw new Meteor.Error('User not logged in!');
+        }
+
         HWClass.insert({
             name,
             code,
             teacher,
             room,
             url,
+            userID: Meteor.userId(),
         });
     },
-    'hw.class.list'() {
-        const query = HWClass.find({}).fetch();
+    'hw.class.list'(userID) {
+        check(userID, String);
+
+        const query = HWClass.find({ userID }).fetch();
         const result = [];
         query.forEach(function(hwClass) {
             const a = {
@@ -52,6 +59,10 @@ Meteor.methods({
     },
     'hw.class.remove'(hwClassID) {
         check(hwClassID, Match._id);
+
+        if (!Meteor.userId()) {
+            throw new Meteor.Error('User not logged in!');
+        }
 
         HWClass.remove(hwClassID);
     },
