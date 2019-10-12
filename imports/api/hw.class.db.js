@@ -8,10 +8,10 @@ if (Meteor.isServer) {
     Meteor.publish('hwClass', function hwPublication() {
         return HWClass.find();
     });
-    Meteor.publish('hwClassOne', function hwPublication(className) {
-        check(className, String);
+    Meteor.publish('hwClassOne', function hwPublication(classID) {
+        check(classID, String);
 
-        return HWClass.find({ name: className });
+        return HWClass.find({ _id: classID });
     });
 }
 

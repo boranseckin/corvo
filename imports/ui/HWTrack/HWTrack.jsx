@@ -21,12 +21,12 @@ const { Title } = Typography;
 
 class HWTrack extends Component {
     static propTypes = {
-        className: propTypes.string,
+        classID: propTypes.string,
         hwClass: propTypes.arrayOf(propTypes.object),
     };
 
     static defaultProps = {
-        className: propTypes.string,
+        classID: propTypes.string,
         hwClass: propTypes.arrayOf(propTypes.object),
     };
 
@@ -63,8 +63,8 @@ class HWTrack extends Component {
     }
 
     render() {
-        const { className, hwClass } = this.props;
-        if (className === 'home') {
+        const { classID, hwClass } = this.props;
+        if (classID === 'home') {
             return (
                 <div>
                     <Title>
@@ -93,13 +93,7 @@ class HWTrack extends Component {
         }
         return (
             <div>
-                <Title>
-                    Homework Tracker -
-                    &nbsp;
-                    {className}
-                </Title>
-
-                <HWTrackClass className={className} />
+                <HWTrackClass classID={classID} />
             </div>
         );
     }

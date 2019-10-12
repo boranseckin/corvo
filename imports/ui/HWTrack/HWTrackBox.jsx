@@ -76,9 +76,9 @@ class HWTrackBox extends Component {
     handleCardClick(event) {
         event.preventDefault();
 
-        const { className } = this.props;
+        const { classID } = this.props;
 
-        FlowRouter.go(`/hw/${className}`);
+        FlowRouter.go(`/hw/${classID}`);
     }
 
     render() {

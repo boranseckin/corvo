@@ -25,14 +25,15 @@ import HWTrackEditModal from './HWTrackEditModal.jsx';
 import HWClass from '../../api/hw.class.db.js';
 import HW from '../../api/hw.db.js';
 
-const { Paragraph } = Typography;
+const { Paragraph, Title } = Typography;
+
 export default class HWTrackClass extends Component {
     static propTypes = {
-        className: propTypes.string,
+        classID: propTypes.string,
     };
 
     static defaultProps = {
-        className: propTypes.string,
+        classID: propTypes.string,
     };
 
     constructor(props) {
@@ -49,14 +50,14 @@ export default class HWTrackClass extends Component {
     }
 
     componentDidMount() {
-        const { className } = this.props;
+        const { classID } = this.props;
 
         this.tracker = Tracker.autorun(() => {
-            Meteor.subscribe('hwClassOne', className);
+            Meteor.subscribe('hwClassOne', classID);
             Meteor.subscribe('hws');
 
             const currentClass = HWClass.find({
-                name: className,
+                _id: classID,
                 userID: Meteor.userId(),
             }).fetch()[0];
 
@@ -205,6 +206,7 @@ export default class HWTrackClass extends Component {
             this.createFormData();
             return (
                 <div>
+                    <Title>{currentClass.name}</Title>
                     <Paragraph>
                         <b>Class Code:</b>
                         &nbsp;
