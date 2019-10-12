@@ -28,10 +28,6 @@ Meteor.methods({
         check(room, Number);
         check(url, Match.Maybe(String));
 
-        if (!Meteor.userId()) {
-            throw new Meteor.Error('User not logged in!');
-        }
-
         HWClass.insert({
             name,
             code,
@@ -59,10 +55,6 @@ Meteor.methods({
     },
     'hw.class.remove'(hwClassID) {
         check(hwClassID, Match._id);
-
-        if (!Meteor.userId()) {
-            throw new Meteor.Error('User not logged in!');
-        }
 
         HWClass.remove(hwClassID);
     },
