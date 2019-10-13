@@ -1,6 +1,8 @@
 import { Meteor } from 'meteor/meteor';
 import React, { Component } from 'react';
 import { Accounts } from 'meteor/accounts-base';
+import { Tracker } from 'meteor/tracker';
+import * as RLocalStorage from 'meteor/simply:reactive-local-storage';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import propTypes from 'prop-types';
 
@@ -36,6 +38,17 @@ export default class Verify extends Component {
         } else {
             this.sendVerificationEmail();
         }
+
+        Tracker.autorun(() => {
+            if (RLocalStorage.getItem('emailCallback')) {
+                this.setState({ pending: false }, () => {
+                    setTimeout(() => {
+                        RLocalStorage.removeItem('emailCallback');
+                        FlowRouter.go('/hw');
+                    }, 2000);
+                });
+            }
+        });
     }
 
     verifyByToken() {
@@ -44,6 +57,7 @@ export default class Verify extends Component {
         Accounts.verifyEmail(token, (error) => {
             if (!error) {
                 this.setState({ pending: false });
+                RLocalStorage.setItem('emailCallback', true);
                 setTimeout(() => {
                     FlowRouter.go('/hw');
                 }, 2000);
@@ -68,6 +82,7 @@ export default class Verify extends Component {
                         }, 2000);
                     }
                 }
+                RLocalStorage.setItem('emailCallback', false);
             });
         }
     }
