@@ -28,3 +28,4 @@ xolvio:cleaner
 momentjs:moment
 accounts-password
 tprzytula:remember-me
+simply:reactive-local-storage
