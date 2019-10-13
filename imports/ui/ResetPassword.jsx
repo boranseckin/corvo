@@ -77,6 +77,17 @@ const ResetForm = Form.create({ name: 'resetForm' })(
                 <div>
                     <Form onSubmit={this.handleSubmit} className="login-form" style={{ maxWidth: '300px' }}>
                         <Form.Item>
+                            {getFieldDecorator('username', {
+                                rules: [
+                                    {
+                                        required: false,
+                                    },
+                                ],
+                            })(
+                                <Input hidden autoComplete="username" />,
+                            )}
+                        </Form.Item>
+                        <Form.Item>
                             {getFieldDecorator('password', {
                                 rules: [
                                     {
