@@ -1,6 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 import { Meteor } from 'meteor/meteor';
 import React, { Component } from 'react';
+import { Tracker } from 'meteor/tracker';
 import propTypes from 'prop-types';
 
 import {
@@ -18,7 +19,6 @@ const CreateForm = Form.create({ name: 'newAssignmentForm' })(
             onCancel: propTypes.func,
             onCreate: propTypes.func,
             confirmLoading: propTypes.bool,
-            classList: propTypes.arrayOf(propTypes.object),
             form: propTypes.objectOf(propTypes.any),
         };
 
@@ -27,9 +27,28 @@ const CreateForm = Form.create({ name: 'newAssignmentForm' })(
             onCancel: propTypes.func,
             onCreate: propTypes.func,
             confirmLoading: propTypes.bool,
-            classList: propTypes.arrayOf(propTypes.object),
             form: propTypes.objectOf(propTypes.any),
         };
+
+        constructor(props) {
+            super(props);
+
+            this.state = {
+                classList: [],
+            };
+        }
+
+        componentDidMount() {
+            this.computation = Tracker.autorun(() => {
+                Meteor.call('hw.class.list', Meteor.userId(), (error, result) => {
+                    this.setState({ classList: result });
+                });
+            });
+        }
+
+        componentWillUnmount() {
+            this.computation.stop();
+        }
 
         removePartner = (k) => {
             const { form } = this.props;
@@ -51,7 +70,7 @@ const CreateForm = Form.create({ name: 'newAssignmentForm' })(
         }
 
         renderOptions() {
-            const { classList } = this.props;
+            const { classList } = this.state;
 
             return classList.map(a => (
                 <Option key={a._id} value={a._id}>
@@ -212,16 +231,11 @@ export default class HWTrackModal extends Component {
 
         this.state = {
             visible: false,
-            classList: [],
             confirmLoading: false,
         };
 
         this.handleClick = this.handleClick.bind(this);
         this.handleCancel = this.handleCancel.bind(this);
-    }
-
-    componentDidMount() {
-        this.returnClass();
     }
 
     handleClick = (e) => {
@@ -279,14 +293,8 @@ export default class HWTrackModal extends Component {
         this.formRef = formRef;
     };
 
-    returnClass = () => {
-        Meteor.call('hw.class.list', Meteor.userId(), (error, result) => {
-            this.setState({ classList: result });
-        });
-    }
-
     render() {
-        const { visible, classList, confirmLoading } = this.state;
+        const { visible, confirmLoading } = this.state;
         return (
             <div>
                 <Button icon="plus" size="large" shape="round" onClick={this.handleClick}>New Assignment</Button>
@@ -297,7 +305,6 @@ export default class HWTrackModal extends Component {
                     onCancel={this.handleCancel}
                     onCreate={this.handleSubmit}
                     confirmLoading={confirmLoading}
-                    classList={classList}
                 />
             </div>
         );
