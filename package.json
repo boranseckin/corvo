@@ -10,6 +10,9 @@
     "pretest": "npm run lint --silent",
     "db-restore": "mongorestore -h 127.0.0.1 --port 3001 -d meteor dump/meteor"
   },
+  "resolutions": {
+    "https-proxy-agent": "^3.0.0"
+  },
   "eslintConfig": {
     "extends": "@meteorjs/eslint-config-meteor",
     "rules": {
@@ -29,7 +32,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.6.3",
-    "antd": "^3.24.2",
+    "antd": "^3.24.3",
     "bcrypt": "^3.0.6",
     "browserslist": "^4.7.2",
     "caniuse-lite": "1.0.30000999",
@@ -64,6 +67,7 @@
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-meteor": "^5.2.0",
     "eslint-plugin-react": "^7.16.0",
+    "npm-force-resolutions": "0.0.3",
     "tar": "^4.4.13"
   }
 }
