@@ -1,5 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import { Accounts } from 'meteor/accounts-base';
+import { HTTP } from 'meteor/http';
 
 import '../imports/api/db.js';
 import '../imports/api/user.js';
@@ -47,4 +48,19 @@ Meteor.startup(() => {
     if (Meteor.settings.mail) {
         process.env.MAIL_URL = Meteor.settings.mail.smtp;
     }
+
+    HTTP.get('https://api.github.com/repos/boranseckin/corvo/releases/latest', {
+        headers: {
+            'User-Agent': 'Meteor',
+        },
+    }, (err, res) => {
+        if (!err && res.data) {
+            process.env.CORVO_VERSION = res.data.tag_name;
+            Meteor.methods({
+                'CORVO_VERSION'() {
+                    return process.env.CORVO_VERSION;
+                },
+            });
+        }
+    });
 });
