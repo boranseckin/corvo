@@ -8,10 +8,15 @@ import {
     Button,
     Divider,
     Popconfirm,
+    Typography,
+    Row,
+    Col,
 } from 'antd';
 
 import URL from '../../api/url.db.js';
 import UrlShortForm from './UrlShortForm.jsx';
+
+const { Paragraph, Title } = Typography;
 
 export default class UrlShort extends Component {
     static handleOpen(shortUrl, e) {
@@ -118,20 +123,23 @@ export default class UrlShort extends Component {
     render() {
         const { urlCount, columns, data } = this.state;
         return (
-            <div className="container">
-                <h1>
-                    {`URL Shortener - ${urlCount}`}
-                </h1>
-                <br />
-                <p>
-                    Create your shortened url! Then, use&nbsp;
-                    <i>corvoapp.com/r/(Shortened URL)</i>
-                    .
-                </p>
-                <UrlShortForm />
-                <br />
-                <Table columns={columns} dataSource={data} pagination={false} />
-            </div>
+            <Row gutter={24}>
+                <Col span={20} offset={2}>
+                    <div>
+                        <Title>
+                            {`URL Shortener - ${urlCount}`}
+                        </Title>
+                        <Paragraph>
+                            Create your shortened url! Then, use&nbsp;
+                            <i>corvoapp.com/r/(Shortened URL)</i>
+                            .
+                        </Paragraph>
+                        <UrlShortForm />
+                        <br />
+                        <Table columns={columns} dataSource={data} pagination={false} />
+                    </div>
+                </Col>
+            </Row>
         );
     }
 }
