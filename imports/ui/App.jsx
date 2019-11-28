@@ -50,6 +50,9 @@ export default class App extends Component {
                     <div id="content">
                         {content}
                     </div>
+                    <br />
+                    <br />
+                    <br />
                     <Footer style={{
                         textAlign: 'center',
                         position: 'fixed',
