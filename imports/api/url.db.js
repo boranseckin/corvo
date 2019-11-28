@@ -1,6 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
 import { check } from 'meteor/check';
+import moment from 'moment';
 
 const URL = new Mongo.Collection('url');
 
@@ -31,9 +32,9 @@ Meteor.methods({
         let expire;
 
         if (duration === '1h') {
-            expire = new Date(Date.now() + (60000 * 60));
+            expire = moment(moment() + (60000 * 60));
         } else if (duration === '24h') {
-            expire = new Date(Date.now() + (60000 * 60 * 24));
+            expire = moment(moment() + (60000 * 60 * 24));
         } else if (duration === 'Unlimited') {
             expire = undefined;
         }
@@ -43,8 +44,8 @@ Meteor.methods({
             realUrl,
             name,
             duration,
-            createdAt: new Date(),
-            expireAt: expire,
+            createdAt: moment().format('dddd, MMMM Do YYYY, h:mm:ss a'),
+            expireAt: expire ? expire.format('dddd, MMMM Do YYYY, h:mm:ss a') : null,
             userID: Meteor.userId(),
         });
     },

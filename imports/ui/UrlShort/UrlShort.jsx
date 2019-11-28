@@ -2,16 +2,22 @@ import { Meteor } from 'meteor/meteor';
 import React, { Component } from 'react';
 import { Tracker } from 'meteor/tracker';
 import { FlowRouter } from 'meteor/kadira:flow-router';
+import moment from 'moment';
 
 import {
     Table,
     Button,
     Divider,
     Popconfirm,
+    Typography,
+    Row,
+    Col,
 } from 'antd';
 
 import URL from '../../api/url.db.js';
 import UrlShortForm from './UrlShortForm.jsx';
+
+const { Paragraph, Title } = Typography;
 
 export default class UrlShort extends Component {
     static handleOpen(shortUrl, e) {
@@ -99,13 +105,23 @@ export default class UrlShort extends Component {
         const array = [];
 
         urls.forEach((element) => {
+            const date = moment(element.createdAt, 'dddd, MMMM Do YYYY, h:mm:ss a');
+            let modifiedRealUrl;
+
+            if (element.realUrl.length >= 55) {
+                modifiedRealUrl = element.realUrl.slice(0, 55);
+                modifiedRealUrl = modifiedRealUrl.concat('...');
+            } else {
+                modifiedRealUrl = element.realUrl;
+            }
+
             const entry = {
                 key: element._id,
                 name: element.name,
-                actualUrl: element.realUrl,
+                actualUrl: modifiedRealUrl,
                 shortUrl: element.shortUrl,
                 duration: element.duration,
-                createdAt: element.createdAt.toLocaleDateString(),
+                createdAt: date.format('dddd, MMM Do YYYY, H:mm:ss'),
             };
             array.push(entry);
         });
@@ -118,20 +134,23 @@ export default class UrlShort extends Component {
     render() {
         const { urlCount, columns, data } = this.state;
         return (
-            <div className="container">
-                <h1>
-                    {`URL Shortener - ${urlCount}`}
-                </h1>
-                <br />
-                <p>
-                    Create your shortened url! Then, use&nbsp;
-                    <i>corvoapp.com/r/(Shortened URL)</i>
-                    .
-                </p>
-                <UrlShortForm />
-                <br />
-                <Table columns={columns} dataSource={data} pagination={false} />
-            </div>
+            <Row gutter={24}>
+                <Col span={20} offset={2}>
+                    <div>
+                        <Title>
+                            {`URL Shortener - ${urlCount}`}
+                        </Title>
+                        <Paragraph>
+                            Create your shortened url! Then, use&nbsp;
+                            <i>corvoapp.com/r/(Shortened URL)</i>
+                            .
+                        </Paragraph>
+                        <UrlShortForm />
+                        <br />
+                        <Table columns={columns} dataSource={data} pagination={false} />
+                    </div>
+                </Col>
+            </Row>
         );
     }
 }
