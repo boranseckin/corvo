@@ -10,6 +10,7 @@ import {
     Divider,
     Popconfirm,
     Typography,
+    Popover,
     Row,
     Col,
 } from 'antd';
@@ -50,8 +51,17 @@ export default class UrlShort extends Component {
                 },
                 {
                     title: 'Actual URL',
-                    dataIndex: 'actualUrl',
-                    key: 'actualUrl',
+                    dataIndex: 'modifiedRealUrl',
+                    key: 'modifiedRealUrl',
+                    render: (text, record) => (
+                        <span>
+                            <Popover placement="topLeft" content={(<div>{record.actualUrl}</div>)}>
+                                <a href={record.actualUrl}>
+                                    {record.modifiedRealUrl}
+                                </a>
+                            </Popover>
+                        </span>
+                    ),
                 },
                 {
                     title: 'Created At',
@@ -118,7 +128,8 @@ export default class UrlShort extends Component {
             const entry = {
                 key: element._id,
                 name: element.name,
-                actualUrl: modifiedRealUrl,
+                actualUrl: element.realUrl,
+                modifiedRealUrl,
                 shortUrl: element.shortUrl,
                 duration: element.duration,
                 createdAt: date.format('dddd, MMM Do YYYY, H:mm:ss'),
