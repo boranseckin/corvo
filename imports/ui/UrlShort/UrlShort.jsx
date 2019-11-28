@@ -2,6 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import React, { Component } from 'react';
 import { Tracker } from 'meteor/tracker';
 import { FlowRouter } from 'meteor/kadira:flow-router';
+import moment from 'moment';
 
 import {
     Table,
@@ -104,13 +105,15 @@ export default class UrlShort extends Component {
         const array = [];
 
         urls.forEach((element) => {
+            const date = moment(element.createdAt, 'dddd, MMMM Do YYYY, h:mm:ss a');
+
             const entry = {
                 key: element._id,
                 name: element.name,
                 actualUrl: element.realUrl,
                 shortUrl: element.shortUrl,
                 duration: element.duration,
-                createdAt: element.createdAt.toLocaleDateString(),
+                createdAt: date.format('dddd, MMM Do YYYY, H:mm:ss'),
             };
             array.push(entry);
         });
