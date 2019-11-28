@@ -106,11 +106,19 @@ export default class UrlShort extends Component {
 
         urls.forEach((element) => {
             const date = moment(element.createdAt, 'dddd, MMMM Do YYYY, h:mm:ss a');
+            let modifiedRealUrl;
+
+            if (element.realUrl.length >= 55) {
+                modifiedRealUrl = element.realUrl.slice(0, 55);
+                modifiedRealUrl = modifiedRealUrl.concat('...');
+            } else {
+                modifiedRealUrl = element.realUrl;
+            }
 
             const entry = {
                 key: element._id,
                 name: element.name,
-                actualUrl: element.realUrl,
+                actualUrl: modifiedRealUrl,
                 shortUrl: element.shortUrl,
                 duration: element.duration,
                 createdAt: date.format('dddd, MMM Do YYYY, H:mm:ss'),
