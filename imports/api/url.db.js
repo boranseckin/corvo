@@ -45,7 +45,7 @@ Meteor.methods({
             name,
             duration,
             createdAt: moment().format('dddd, MMMM Do YYYY, h:mm:ss a'),
-            expireAt: expire ? expire.format('dddd, MMMM Do YYYY, h:mm:ss a') : null,
+            expireAt: expire ? expire.toDate() : null,
             userID: Meteor.userId(),
         });
     },
