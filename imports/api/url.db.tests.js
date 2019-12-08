@@ -27,7 +27,7 @@ if (Meteor.isServer) {
 
                 deleteURL.apply(invocation, [urlID]);
 
-                assert.equal(URL.find().count(), 0);
+                assert.equal(URL.find({ isDeleted: false }).count(), 0);
             });
         });
     });
