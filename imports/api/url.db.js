@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
-import { check } from 'meteor/check';
+import { check, Match } from 'meteor/check';
 import moment from 'moment';
 
 const URL = new Mongo.Collection('url');
@@ -10,6 +10,11 @@ if (Meteor.isServer) {
         return URL.find();
     });
 }
+
+Match._id = Match.Where((id) => {
+    check(id, String);
+    return /\b[a-zA-Z0-9]{17}\b/.test(id);
+});
 
 function creatUrl(length) {
     let result = '';
@@ -22,7 +27,6 @@ function creatUrl(length) {
 }
 
 Meteor.methods({
-
     'url.insert'(realUrl, name, duration) {
         check(realUrl, String);
         check(name, String);
@@ -44,18 +48,47 @@ Meteor.methods({
             realUrl,
             name,
             duration,
-            createdAt: moment().format('dddd, MMMM Do YYYY, h:mm:ss a'),
+            createdAt: moment().toDate(),
             expireAt: expire ? expire.toDate() : null,
             userID: Meteor.userId(),
+            isDeleted: false,
+        }, (err, res) => {
+            if (err) {
+                throw new Meteor.Error(`url.insert: ${err}`);
+            }
+            if (!Meteor.isTest) {
+                Meteor.call('track.newAction', Meteor.userId(), 'url.insert', res);
+            }
         });
     },
     'url.remove'(urlID) {
-        check(urlID, String);
+        check(urlID, Match._id);
 
-        URL.remove(urlID);
+        URL.update({ _id: urlID }, { $set: { isDeleted: true } }, (err) => {
+            if (err) {
+                throw new Meteor.Error(`url.remove: ${err}`);
+            }
+            if (!Meteor.isTest) {
+                Meteor.call('track.newAction', Meteor.userId(), 'url.remove', urlID);
+            }
+        });
     },
     'url.clear'() {
-        URL.remove({});
+        if (Meteor.userId() && process.env.SU) {
+            const { username } = Meteor.user(Meteor.userId());
+            if (process.env.SU.includes(username)) {
+                URL.remove({}, (err) => {
+                    if (err) {
+                        throw new Meteor.Error(`url.clear: ${err}`);
+                    }
+                    if (!Meteor.isTest) {
+                        Meteor.call('track.newAction', Meteor.userId(), 'url.clear');
+                    }
+                });
+            } else {
+                throw new Meteor.Error('url.clear: Unauthorized user!');
+            }
+        }
     },
 });
 
