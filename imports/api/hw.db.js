@@ -12,7 +12,7 @@ if (Meteor.isServer) {
 }
 
 function createDate() {
-    return moment().format('dddd, MMMM Do YYYY, h:mm:ss a');
+    return moment().toDate();
 }
 
 Match._id = Match.Where((id) => {
@@ -55,50 +55,54 @@ Meteor.methods({
         check(partners, Match.Optional([String]));
         check(description, Match.Maybe(Match.description));
 
+        const dateDueDate = moment(dueDate, 'dddd, MMMM Do YYYY, h:mm:ss a').toDate();
+
         HW.insert({
             alias,
             classID,
-            dueDate,
+            dueDate: dateDueDate,
             createdAt: createDate(),
             submitMethod,
             partners,
             description,
             isCompleted: false,
+            isDeleted: false,
             userID: Meteor.userId(),
+        }, (err, res) => {
+            if (err) {
+                throw new Meteor.Error(`hw.insert: ${err}`);
+            }
+
+            if (!Meteor.isTest) {
+                Meteor.call('track.newAction', Meteor.userId(), 'hw.insert', res);
+            }
         });
     },
     'hw.remove'(hwID) {
         check(hwID, Match._id);
 
-        HW.remove(hwID);
+        HW.update({ _id: hwID }, { $set: { isDeleted: true } }, (err) => {
+            if (err) {
+                throw new Meteor.Error(`hw.remove: ${err}`);
+            }
+
+            if (!Meteor.isTest) {
+                Meteor.call('track.newAction', Meteor.userId(), 'hw.remove', hwID);
+            }
+        });
     },
     'hw.complete'(hwID) {
         check(hwID, Match._id);
 
-        HW.update({ _id: hwID }, { $set: { isCompleted: true } });
-    },
-    'hw.edit'(hwID, editField, edit) {
-        check(hwID, Match._id);
-        check(editField, String);
-        check(edit, Match.Any);
+        HW.update({ _id: hwID }, { $set: { isCompleted: true } }, (err) => {
+            if (err) {
+                throw new Meteor.Error(`hw.complete: ${err}`);
+            }
 
-        if (editField === 'alias') {
-            check(edit, String);
-        } else if (editField === 'classID') {
-            check(edit, Match._id);
-        } else if (editField === 'dueDate') {
-            check(edit, Match.dueDate);
-        } else if (editField === 'submitMethod') {
-            check(edit, Match.submitMethod);
-        } else if (editField === 'partners') {
-            check(edit, Match.Optional([String]));
-        } else if (editField === 'description') {
-            check(edit, Match.Optional(Match.description));
-        } else {
-            return;
-        }
-
-        HW.update({ _id: hwID }, { $set: { [editField]: edit } });
+            if (!Meteor.isTest) {
+                Meteor.call('track.newAction', Meteor.userId(), 'hw.complete', hwID);
+            }
+        });
     },
     'hw.update'(hwID, alias, classID, dueDate, submitMethod, partners, description) {
         check(hwID, Match._id);
@@ -109,19 +113,43 @@ Meteor.methods({
         check(partners, Match.Optional([String]));
         check(description, Match.Maybe(Match.description));
 
+        const dateDueDate = moment(dueDate, 'dddd, MMMM Do YYYY, h:mm:ss a').toDate();
+
         HW.update({ _id: hwID }, {
             $set: {
                 alias,
                 classID,
-                dueDate,
+                dueDate: dateDueDate,
                 submitMethod,
                 partners,
                 description,
             },
+        }, (err) => {
+            if (err) {
+                throw new Meteor.Error(`hw.update: ${err}`);
+            }
+
+            if (!Meteor.isTest) {
+                Meteor.call('track.newAction', Meteor.userId(), 'hw.update', hwID);
+            }
         });
     },
     'hw.clear'() {
-        HW.remove({});
+        if (Meteor.userId() && process.env.SU) {
+            const { username } = Meteor.user(Meteor.userId());
+            if (process.env.SU.includes(username)) {
+                HW.remove({}, (err) => {
+                    if (err) {
+                        throw new Meteor.Error(`hw.clear: ${err}`);
+                    }
+                    if (!Meteor.isTest) {
+                        Meteor.call('track.newAction', Meteor.userId(), 'hw.clear');
+                    }
+                });
+            } else {
+                throw new Meteor.Error('hw.clear: Unauthorized user!');
+            }
+        }
     },
 });
 
