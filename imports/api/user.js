@@ -16,12 +16,21 @@ Meteor.methods({
             password,
         });
 
+        if (!Meteor.isTest) {
+            const { _id: userID } = Meteor.users.findOne({ username });
+            Meteor.call('track.newAction', 'system', 'user.insert', userID);
+        }
+
         return user;
     },
     'user.sendVerificationEmail'(userId) {
         check(userId, String);
 
         Accounts.sendVerificationEmail(userId);
+
+        if (!Meteor.isTest) {
+            Meteor.call('track.newAction', 'system', 'user.sendVerificationEmail', userId);
+        }
     },
     'user.checkResetToken'(token) {
         check(token, String);
@@ -40,5 +49,11 @@ Meteor.methods({
         if (moment().diff(moment(when), 'ms') > expire) {
             throw new Meteor.Error(403, 'Token is expired!');
         }
+    },
+    'user.forgotPassword'(email) {
+        check(email, String);
+
+        const { _id: userID } = Meteor.users.findOne({ 'emails.address': email });
+        Meteor.call('track.newAction', userID, 'user.forgotPassword', userID);
     },
 });
