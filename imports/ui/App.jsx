@@ -42,10 +42,12 @@ export default class App extends Component {
         const { content } = this.props;
         const { version } = this.state;
 
+        const { name: contentName } = content.type;
+
         return (
             <div>
                 <center>
-                    <Navbar />
+                    {contentName === 'UrlRedirect' ? null : <Navbar /> }
                     <br />
                     <div id="content">
                         {content}
