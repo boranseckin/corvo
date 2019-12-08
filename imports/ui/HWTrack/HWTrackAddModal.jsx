@@ -202,7 +202,7 @@ const CreateForm = Form.create({ name: 'newAssignmentForm' })(
 
                         <Form.Item label="Description">
                             {getFieldDecorator('description', descriptionConfig)(
-                                <Input.TextArea rows={3} autosize={autoSizeConfig} />,
+                                <Input.TextArea rows={3} autoSize={autoSizeConfig} />,
                             )}
                         </Form.Item>
 
