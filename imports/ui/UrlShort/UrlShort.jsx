@@ -100,14 +100,21 @@ export default class UrlShort extends Component {
     componentDidMount() {
         Meteor.subscribe('urls');
 
-        Tracker.autorun(() => {
-            const query = URL.find({ userID: Meteor.userId() }).fetch();
+        this.tracker = Tracker.autorun(() => {
+            const query = URL.find({
+                userID: Meteor.userId(),
+                isDeleted: false,
+            }).fetch();
 
             this.setState({
                 urls: query,
                 urlCount: query.length,
             }, () => this.mapURL());
         });
+    }
+
+    componentWillUnmount() {
+        this.tracker.stop();
     }
 
     mapURL() {
