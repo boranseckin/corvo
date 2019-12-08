@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Meteor } from 'meteor/meteor';
 import RememberMe from 'meteor/tprzytula:remember-me';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import propTypes from 'prop-types';
@@ -30,6 +31,7 @@ const LoginForm = Form.create({ name: 'loginForm' })(
                     RememberMe.loginWithPassword(values.username, values.password, (error) => {
                         if (!error) {
                             form.resetFields();
+                            Meteor.call('track.newAction', Meteor.userId(), 'user.login', Meteor.userId());
                             FlowRouter.go('/');
                         } else if (error.error === 403) {
                             message.error('Username or password is incorrect, please try again!');
