@@ -44,7 +44,7 @@ export default class Verify extends Component {
                 this.setState({ pending: false }, () => {
                     setTimeout(() => {
                         RLocalStorage.removeItem('emailCallback');
-                        FlowRouter.go('/hw');
+                        FlowRouter.go('/');
                     }, 2000);
                 });
             }
@@ -56,10 +56,12 @@ export default class Verify extends Component {
 
         Accounts.verifyEmail(token, (error) => {
             if (!error) {
+                Meteor.call('track.newAction', Meteor.userId(), 'user.verifyEmail', Meteor.userId());
+
                 this.setState({ pending: false });
                 RLocalStorage.setItem('emailCallback', true);
                 setTimeout(() => {
-                    FlowRouter.go('/hw');
+                    FlowRouter.go('/');
                 }, 2000);
             } else if (error.reason === 'Verify email link expired') {
                 message.error('This verification token is not valid!');
