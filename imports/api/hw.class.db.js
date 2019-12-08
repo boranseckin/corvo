@@ -1,6 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
 import { check, Match } from 'meteor/check';
+import moment from 'moment';
 
 const HWClass = new Mongo.Collection('hwClass');
 
@@ -34,13 +35,22 @@ Meteor.methods({
             teacher,
             room,
             url,
+            createdAt: moment().toDate(),
             userID: Meteor.userId(),
+            isDeleted: false,
+        }, (err, res) => {
+            if (err) {
+                throw new Meteor.Error(`hw.class.insert: ${err}`);
+            }
+            if (!Meteor.isTest) {
+                Meteor.call('track.newAction', Meteor.userId(), 'hwClass.insert', res);
+            }
         });
     },
     'hw.class.list'(userID) {
         check(userID, String);
 
-        const query = HWClass.find({ userID }).fetch();
+        const query = HWClass.find({ userID, isDeleted: false }).fetch();
         const result = [];
         query.forEach(function(hwClass) {
             const a = {
@@ -56,10 +66,32 @@ Meteor.methods({
     'hw.class.remove'(hwClassID) {
         check(hwClassID, Match._id);
 
-        HWClass.remove(hwClassID);
+        HWClass.update({ _id: hwClassID }, { $set: { isDeleted: true } }, (err) => {
+            if (err) {
+                throw new Meteor.Error(`hw.class.remove: ${err}`);
+            }
+
+            if (!Meteor.isTest) {
+                Meteor.call('track.newAction', Meteor.userId(), 'hwClass.remove', hwClassID);
+            }
+        });
     },
     'hw.class.clear'() {
-        HWClass.remove({});
+        if (Meteor.userId() && process.env.SU) {
+            const { username } = Meteor.user(Meteor.userId());
+            if (process.env.SU.includes(username)) {
+                HWClass.remove({}, (err) => {
+                    if (err) {
+                        throw new Meteor.Error(`hw.class.clear: ${err}`);
+                    }
+                    if (!Meteor.isTest) {
+                        Meteor.call('track.newAction', Meteor.userId(), 'hwClass.clear');
+                    }
+                });
+            } else {
+                throw new Meteor.Error('hw.class.clear: Unauthorized user!');
+            }
+        }
     },
 });
 

@@ -4,6 +4,7 @@ import { Meteor } from 'meteor/meteor';
 import { Random } from 'meteor/random';
 import { assert } from 'chai';
 import { resetDatabase } from 'meteor/xolvio:cleaner';
+import moment from 'moment';
 
 import HWClass from './hw.class.db.js';
 
@@ -20,7 +21,9 @@ if (Meteor.isServer) {
                     code: 'TTT4U1-1',
                     teacher: 'John Doe',
                     room: 111,
+                    createdAt: moment().toDate(),
                     userID,
+                    isDeleted: false,
                 });
             });
 
@@ -30,7 +33,7 @@ if (Meteor.isServer) {
 
                 deleteHWClass.apply(invocation, [hwClassID]);
 
-                assert.equal(HWClass.find().count(), 0);
+                assert.equal(HWClass.find({ isDeleted: false }).count(), 0);
             });
         });
     });
