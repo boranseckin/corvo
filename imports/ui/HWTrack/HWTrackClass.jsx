@@ -66,6 +66,7 @@ export default class HWTrackClass extends Component {
                     classID: currentClass._id,
                     userID: Meteor.userId(),
                     isCompleted: false,
+                    isDeleted: false,
                 }).fetch();
                 this.setState({
                     currentClass,
