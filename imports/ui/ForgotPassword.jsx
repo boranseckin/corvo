@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Meteor } from 'meteor/meteor';
 import { Accounts } from 'meteor/accounts-base';
 import propTypes from 'prop-types';
 
@@ -37,6 +38,7 @@ const ForgotPasswordForm = Form.create({ name: 'forgotPasswordForm' })(
                 if (!err) {
                     Accounts.forgotPassword({ email: values.email }, (error) => {
                         if (!error) {
+                            Meteor.call('user.forgotPassword', values.email);
                             message.success('The recovery link has been sent to your email!');
                             this.setState({ button: false, loading: false });
                         } else {
