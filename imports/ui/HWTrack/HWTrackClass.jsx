@@ -59,6 +59,7 @@ export default class HWTrackClass extends Component {
             const currentClass = HWClass.find({
                 _id: classID,
                 userID: Meteor.userId(),
+                isDeleted: false,
             }).fetch()[0];
 
             if (currentClass) {
