@@ -7,8 +7,11 @@ import '../imports/api/user.js';
 import '../imports/api/url.db.js';
 import '../imports/api/hw.db.js';
 import '../imports/api/hw.class.db.js';
+import '../imports/api/tracker.db.js';
 
 Meteor.startup(() => {
+    process.env.SU = ['boranseckin'];
+
     Accounts.config({ loginExpirationInDays: 30 });
 
     Accounts.emailTemplates.from = 'Corvo Account Manager <no-reply@boranseckin.com>';
