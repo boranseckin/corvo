@@ -86,7 +86,7 @@ class HWTrackBox extends Component {
         } = this.props;
         const { cardLoading, activeHW } = this.state;
         return (
-            <Col span={6}>
+            <Col span={5}>
                 <Card
                     title={className}
                     hoverable="true"
