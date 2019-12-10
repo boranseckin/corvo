@@ -47,6 +47,7 @@ export default class HWTrackClass extends Component {
 
         this.handleCheck = this.handleCheck.bind(this);
         this.handleEdit = this.handleEdit.bind(this);
+        this.handleDelete = this.handleDelete.bind(this);
     }
 
     componentDidMount() {
@@ -97,6 +98,16 @@ export default class HWTrackClass extends Component {
         });
     }
 
+    handleDelete = (value) => {
+        Meteor.call('hw.remove', value.id, (error) => {
+            if (error) {
+                message.error('The process was unsuccessful. Please try again!');
+                return;
+            }
+            message.success('The assignment was succesfully deleted!');
+        });
+    }
+
     handleDeleteClass = () => {
         const { currentClass } = this.state;
         Meteor.call('hw.class.remove', currentClass._id);
@@ -109,7 +120,7 @@ export default class HWTrackClass extends Component {
         });
     }
 
-    calculateDateDiff = due => due.diff(moment(), 'days');
+    calculateDateDiff = due => due.diff(moment(), 'hours');
 
     createFormData() {
         const { activeHW } = this.state;
@@ -132,12 +143,12 @@ export default class HWTrackClass extends Component {
 
             let badge;
 
-            if (diff > 1) {
+            if (diff >= 42) {
                 badge = <Badge status="processing" text="Active" />;
-            } else if (diff === 0) {
-                badge = <Badge status="warning" text="Due Today" />;
-            } else if (diff === 1) {
+            } else if (diff < 42 && diff >= 24) {
                 badge = <Badge status="warning" text="Due Tomorrow" />;
+            } else if (diff < 24 && diff >= 0) {
+                badge = <Badge status="warning" text="Due Today" />;
             } else {
                 badge = <Badge status="error" text="Late" />;
             }
@@ -149,7 +160,7 @@ export default class HWTrackClass extends Component {
                 alias: hw.alias,
                 submitMethod: hw.submitMethod,
                 dueDate: dueDate.format('ddd, MMM Do YYYY, h:mm:ss A'),
-                daysLeft: diff,
+                daysLeft: Math.floor(diff / 24),
                 description: hw.description,
                 partners: partnerString,
                 createdAt: createdAt.format('ddd, MMM Do YYYY, h:mm:ss A'),
@@ -172,7 +183,7 @@ export default class HWTrackClass extends Component {
                 key: 'status',
             },
             {
-                title: 'Alias',
+                title: 'Name',
                 dataIndex: 'alias',
                 key: 'alias',
             },
@@ -192,12 +203,23 @@ export default class HWTrackClass extends Component {
                 render: (text, record) => (
                     <span>
                         <Button icon="edit" shape="round" onClick={() => this.handleEdit(record)} />
+
                         <Divider type="vertical" />
+
                         <Popconfirm
                             title="Are you sure to complete this task?"
                             onConfirm={() => this.handleCheck(record)}
                         >
                             <Button icon="check" shape="round" />
+                        </Popconfirm>
+
+                        <Divider type="vertical" />
+
+                        <Popconfirm
+                            title="Are you sure to delete this task?"
+                            onConfirm={() => this.handleDelete(record)}
+                        >
+                            <Button icon="delete" shape="round" />
                         </Popconfirm>
                     </span>
                 ),
@@ -236,23 +258,25 @@ export default class HWTrackClass extends Component {
                     </Paragraph>
                     <br />
                     <Row>
-                        <Col span={4} />
-                        <Col span={16}>
+                        <Col span={3} />
+                        <Col span={18}>
                             <Table
                                 columns={columns}
                                 expandedRowRender={record => (
-                                    <Descriptions layout="vertical">
-                                        <Descriptions.Item label="Partners" span={1}>{record.partners}</Descriptions.Item>
-                                        <Descriptions.Item label="Submit Method" span={1}>{record.submitMethod}</Descriptions.Item>
-                                        <Descriptions.Item label="Created At" span={1}>{record.createdAt}</Descriptions.Item>
-                                        <Descriptions.Item label="Description" span={3}>{record.description}</Descriptions.Item>
-                                    </Descriptions>
+                                    <div>
+                                        <Descriptions layout="vertical">
+                                            <Descriptions.Item label="Partners" span={1}>{record.partners}</Descriptions.Item>
+                                            <Descriptions.Item label="Submit Method" span={1}>{record.submitMethod}</Descriptions.Item>
+                                            <Descriptions.Item label="Created At" span={1}>{record.createdAt}</Descriptions.Item>
+                                            <Descriptions.Item label="Description" span={3}>{record.description}</Descriptions.Item>
+                                        </Descriptions>
+                                    </div>
                                 )}
                                 dataSource={this.data}
                                 pagination={false}
                             />
                         </Col>
-                        <Col span={4} />
+                        <Col span={3} />
                     </Row>
                     <br />
                     <Popconfirm
