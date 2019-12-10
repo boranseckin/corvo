@@ -46,10 +46,10 @@ class HWTrack extends Component {
         });
     }
 
-    renderClassBox() {
-        const { hwClass } = this.props;
+    renderClassRow() {
+        let { hwClass } = this.props;
 
-        return hwClass.map(hwclass => (
+        hwClass = hwClass.map(hwclass => (
             <HWTrackBox
                 key={hwclass._id}
                 classID={hwclass._id}
@@ -60,6 +60,41 @@ class HWTrack extends Component {
                 classURL={hwClass.url}
             />
         ));
+
+        hwClass = hwClass.reduce((reducedArray, item, index) => {
+            const chunkIndex = Math.floor(index / 4);
+
+            if (!reducedArray[chunkIndex]) {
+                // eslint-disable-next-line no-param-reassign
+                reducedArray[chunkIndex] = [];
+            }
+
+            reducedArray[chunkIndex].push(item);
+            return reducedArray;
+        }, []);
+
+        hwClass = hwClass.map((chunk) => {
+            const colKey1 = Math.random().toString(36).substring(2, 15);
+            const colKey2 = Math.random().toString(36).substring(2, 15);
+            const rowKey = Math.random().toString(36).substring(2, 15);
+
+            chunk.unshift((<Col key={colKey1} span={2} />));
+            chunk.push((<Col key={colKey2} span={2} />));
+
+            const row = (
+                <Row
+                    key={rowKey}
+                    gutter={16}
+                    style={{ marginTop: '9px' }}
+                >
+                    {chunk}
+                </Row>
+            );
+
+            return row;
+        });
+
+        return hwClass;
     }
 
     render() {
@@ -71,23 +106,18 @@ class HWTrack extends Component {
                         Homework Tracker
                     </Title>
 
-                    <Row gutter={24}>
-                        <Col span={4} offset={8}>
+                    <Row justify="center" type="flex" gutter={16}>
+                        <Col span={4}>
                             <HWTrackAddModal />
                         </Col>
                         <Col span={3}>
-                            { hwClass.length >= 4
-                                ? <HWTrackAddClassModal disabled classCount={hwClass.length} />
-                                : <HWTrackAddClassModal classCount={hwClass.length} />
-                            }
+                            <HWTrackAddClassModal classCount={hwClass.length} />
                         </Col>
                     </Row>
 
                     <br />
 
-                    <Row gutter={16}>
-                        {this.renderClassBox()}
-                    </Row>
+                    {this.renderClassRow()}
                 </div>
             );
         }
