@@ -65,8 +65,10 @@ class HWTrackBox extends Component {
         let counter = 0;
 
         for (let i = 0; i < hws.length; i += 1) {
-            if (hws[i].classID === classID && hws[i].isCompleted === false) {
-                counter += 1;
+            if (hws[i].classID === classID) {
+                if (hws[i].isCompleted === false && hws[i].isDeleted === false) {
+                    counter += 1;
+                }
             }
         }
 
