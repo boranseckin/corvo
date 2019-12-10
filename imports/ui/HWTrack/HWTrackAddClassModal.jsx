@@ -124,16 +124,6 @@ const CreateForm = Form.create({ name: 'newClassForm' })(
 );
 
 export default class HWTrackAddClassModal extends Component {
-    static propTypes = {
-        disabled: propTypes.bool,
-        classCount: propTypes.number,
-    };
-
-    static defaultProps = {
-        disabled: false,
-        classCount: 0,
-    };
-
     constructor(props) {
         super(props);
 
@@ -197,15 +187,11 @@ export default class HWTrackAddClassModal extends Component {
     };
 
     render() {
-        const { disabled, classCount } = this.props;
         const { visible, confirmLoading } = this.state;
         return (
             <div>
-                <Button disabled={disabled} icon="plus" size="large" shape="round" onClick={this.handleClick}>
+                <Button icon="plus" size="large" shape="round" onClick={this.handleClick}>
                     New Class
-                    {' '}
-                    {classCount}
-                    /4
                 </Button>
 
                 <CreateForm
