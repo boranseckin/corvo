@@ -47,7 +47,6 @@ class HWTrackBox extends Component {
         this.tracker = Tracker.autorun(() => {
             if (classID) {
                 const activeHW = this.checkClassID(hws);
-
                 this.setState({
                     activeHW,
                     cardLoading: false,
@@ -66,9 +65,7 @@ class HWTrackBox extends Component {
 
         for (let i = 0; i < hws.length; i += 1) {
             if (hws[i].classID === classID) {
-                if (hws[i].isCompleted === false && hws[i].isDeleted === false) {
-                    counter += 1;
-                }
+                counter += 1;
             }
         }
 
@@ -125,6 +122,9 @@ class HWTrackBox extends Component {
 export default withTracker(() => {
     Meteor.subscribe('hws');
     return {
-        hws: HW.find({}).fetch(),
+        hws: HW.find({
+            isDeleted: false,
+            isCompleted: false,
+        }).fetch(),
     };
 })(HWTrackBox);
