@@ -49,19 +49,20 @@ class HWTrack extends Component {
     renderClassRow() {
         let { hwClass } = this.props;
 
-        hwClass = hwClass.map(hwclass => (
+        hwClass = hwClass.map(singleClass => (
             <HWTrackBox
-                key={hwclass._id}
-                classID={hwclass._id}
-                className={hwclass.name}
-                classCode={hwclass.code}
-                classTeacher={hwclass.teacher}
-                classRoom={hwclass.room}
-                classURL={hwClass.url}
+                key={singleClass._id}
+                classID={singleClass._id}
+                className={singleClass.name}
+                classCode={singleClass.code}
+                classTeacher={singleClass.teacher}
+                classRoom={singleClass.room}
+                classURL={singleClass.url}
+                backColor={singleClass.color}
             />
         ));
 
-        hwClass = hwClass.reduce((reducedArray, item, index) => {
+        let hwClassChunks = hwClass.reduce((reducedArray, item, index) => {
             const chunkIndex = Math.floor(index / 4);
 
             if (!reducedArray[chunkIndex]) {
@@ -73,7 +74,7 @@ class HWTrack extends Component {
             return reducedArray;
         }, []);
 
-        hwClass = hwClass.map((chunk) => {
+        hwClassChunks = hwClassChunks.map((chunk) => {
             const colKey1 = Math.random().toString(36).substring(2, 15);
             const colKey2 = Math.random().toString(36).substring(2, 15);
             const rowKey = Math.random().toString(36).substring(2, 15);
@@ -94,7 +95,7 @@ class HWTrack extends Component {
             return row;
         });
 
-        return hwClass;
+        return hwClassChunks;
     }
 
     render() {
