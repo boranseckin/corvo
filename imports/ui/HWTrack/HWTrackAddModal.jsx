@@ -225,7 +225,7 @@ const CreateForm = Form.create({ name: 'newAssignmentForm' })(
     },
 );
 
-export default class HWTrackModal extends Component {
+export default class HWTrackAddModal extends Component {
     constructor(props) {
         super(props);
 
