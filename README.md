@@ -14,7 +14,7 @@ If you would like to check it out either singup or use the username ```test``` a
 
 ### HW Tracker
 
-Homework Tracker is a one page app to keep track of assignments across multiple subjects. It provides a brief summary page with each subject's information and a thorough detail page for all listed subjects. The user can create up to 4 classes and add new assignments to those classes by filling out the modal forms at the summary (home) page. The detail pages offer lists of active assignments with the options of editing and marking them completed. Class and assignment are only visible to the user who created them.
+Homework Tracker is a web app to keep track of assignments across multiple subjects. It provides a brief summary page with each subject's information and a thorough detail page for all listed subjects. The user can create classes and add new assignments to those classes by filling out the modal forms at the summary (home) page. The detail pages offer lists of active assignments with the options of editing, completing and deleting. Classes and assignments are only visible to the user who created them.
 
 ### URL Shortener
 
