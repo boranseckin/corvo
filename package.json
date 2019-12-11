@@ -40,7 +40,7 @@
     "eslint-scope": "^5.0.0",
     "indexof": "0.0.1",
     "meteor-node-stubs": "^0.4.1",
-    "npm": "^6.13.3",
+    "npm": "^6.13.4",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-mounter": "^1.2.0",
