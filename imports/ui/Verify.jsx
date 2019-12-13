@@ -108,7 +108,7 @@ export default class Verify extends Component {
                 <div>
                     <Result
                         status="error"
-                        title="This user not exist!"
+                        title="This user does not exist!"
                         subTitle="Please sign up to get a verification email."
                         extra={(
                             <a href="/signup">
