@@ -2,6 +2,7 @@
 import { Meteor } from 'meteor/meteor';
 import React, { Component } from 'react';
 import propTypes from 'prop-types';
+import { TwitterPicker } from 'react-color';
 
 import {
     Col, Row, Modal, Form, Input, Button, message,
@@ -26,10 +27,24 @@ const CreateForm = Form.create({ name: 'newClassForm' })(
             form: propTypes.objectOf(propTypes.any),
         };
 
+        constructor(props) {
+            super(props);
+
+            this.state = {
+                color: '#fff',
+            };
+        }
+
+        handleColorChange = (color) => {
+            this.setState({ color: color.hex });
+        }
+
         render() {
             const {
                 visible, onCancel, onCreate, form, confirmLoading,
             } = this.props;
+
+            const { color } = this.state;
 
             const { getFieldDecorator } = form;
 
@@ -55,6 +70,10 @@ const CreateForm = Form.create({ name: 'newClassForm' })(
 
             const urlConfig = {
                 rules: [{ required: false, type: 'url', message: 'Please input the classroom url!' }],
+            };
+
+            const colorConfig = {
+                rules: [{ required: false }],
             };
 
             const formItemLayout = {
@@ -115,6 +134,17 @@ const CreateForm = Form.create({ name: 'newClassForm' })(
                             )}
                         </Form.Item>
 
+                        <Form.Item label="Color">
+                            {getFieldDecorator('color', colorConfig)(
+                                <TwitterPicker
+                                    onChange={this.handleColorChange}
+                                    color={color}
+                                    colors={['#F6F0F0', '#FCB900', '#FF6900', '#00D084', '#8ED1FC', '#0693E3', '#ABB8C3', '#EB144C', '#F78DA7', '#9900EF']}
+                                    triangle="hide"
+                                />,
+                            )}
+                        </Form.Item>
+
                     </Form>
 
                 </Modal>
@@ -161,12 +191,18 @@ export default class HWTrackAddClassModal extends Component {
                 return;
             }
 
+            let hexColor = '';
+            if (values.color) {
+                hexColor = values.color.hex || '#ffffff';
+            }
+
             Meteor.call('hw.class.insert',
                 values.name,
                 values.code,
                 values.teacher,
                 parseInt(values.room, 10),
                 values.url,
+                hexColor,
                 (error) => {
                     if (error) {
                         message.error('The process was unsuccessful. Please try again!');
