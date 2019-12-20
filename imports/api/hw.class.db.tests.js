@@ -20,7 +20,7 @@ if (Meteor.isServer) {
                     name: 'TestClass',
                     code: 'TTT4U1-1',
                     teacher: 'John Doe',
-                    room: 111,
+                    room: '111',
                     color: '#ffffff',
                     createdAt: moment().toDate(),
                     userID,

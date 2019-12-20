@@ -26,7 +26,7 @@ Meteor.methods({
         check(name, String);
         check(code, String);
         check(teacher, String);
-        check(room, Number);
+        check(room, String);
         check(url, Match.Maybe(String));
         check(color, Match.Maybe(String));
 
