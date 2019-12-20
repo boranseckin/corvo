@@ -17,7 +17,7 @@ class HWTrackBox extends Component {
         className: propTypes.string,
         classCode: propTypes.string,
         classTeacher: propTypes.string,
-        classRoom: propTypes.number,
+        classRoom: propTypes.string,
         backColor: propTypes.string,
         hws: propTypes.arrayOf(propTypes.object),
     };
@@ -27,7 +27,7 @@ class HWTrackBox extends Component {
         className: propTypes.string,
         classCode: propTypes.string,
         classTeacher: propTypes.string,
-        classRoom: propTypes.number,
+        classRoom: propTypes.string,
         backColor: '#fff',
         hws: propTypes.arrayOf(propTypes.object),
     };
