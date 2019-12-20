@@ -200,7 +200,7 @@ export default class HWTrackAddClassModal extends Component {
                 values.name,
                 values.code,
                 values.teacher,
-                parseInt(values.room, 10),
+                values.room,
                 values.url,
                 hexColor,
                 (error) => {
