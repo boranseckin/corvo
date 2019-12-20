@@ -54,7 +54,7 @@ const CreateForm = Form.create({ name: 'newClassForm' })(
 
             const codeConfig = {
                 rules: [{
-                    required: true, max: 9, message: 'Please input the class code!',
+                    required: true, message: 'Please input the class code!',
                 }],
             };
 
@@ -64,7 +64,7 @@ const CreateForm = Form.create({ name: 'newClassForm' })(
 
             const roomConfig = {
                 rules: [{
-                    required: true, max: 3, message: 'Please input the room number of the class!',
+                    required: true, message: 'Please input the room number of the class!',
                 }],
             };
 
