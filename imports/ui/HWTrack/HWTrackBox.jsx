@@ -28,7 +28,7 @@ class HWTrackBox extends Component {
         classCode: propTypes.string,
         classTeacher: propTypes.string,
         classRoom: propTypes.number,
-        backColor: 'white',
+        backColor: '#fff',
         hws: propTypes.arrayOf(propTypes.object),
     };
 
@@ -92,6 +92,12 @@ class HWTrackBox extends Component {
         } = this.props;
         const { cardLoading, activeHW } = this.state;
 
+        let style = {};
+
+        if (backColor !== '#fff') {
+            style = { backgroundColor: backColor };
+        }
+
         return (
             <Col span={5}>
                 <Card
@@ -99,7 +105,7 @@ class HWTrackBox extends Component {
                     hoverable="true"
                     loading={cardLoading}
                     onClick={this.handleCardClick}
-                    style={{ backgroundColor: [backColor] === undefined ? [backColor] : 'white' }}
+                    headStyle={style}
                 >
                     <p>
                         <b>Class Code:</b>
