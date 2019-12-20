@@ -22,12 +22,13 @@ Match._id = Match.Where((id) => {
 });
 
 Meteor.methods({
-    'hw.class.insert'(name, code, teacher, room, url) {
+    'hw.class.insert'(name, code, teacher, room, url, color) {
         check(name, String);
         check(code, String);
         check(teacher, String);
         check(room, Number);
         check(url, Match.Maybe(String));
+        check(color, Match.Maybe(String));
 
         HWClass.insert({
             name,
@@ -35,6 +36,7 @@ Meteor.methods({
             teacher,
             room,
             url,
+            color: color || '#ffffff',
             createdAt: moment().toDate(),
             userID: Meteor.userId(),
             isDeleted: false,
