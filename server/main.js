@@ -2,7 +2,6 @@ import { Meteor } from 'meteor/meteor';
 import { Accounts } from 'meteor/accounts-base';
 import { HTTP } from 'meteor/http';
 
-import '../imports/api/db.js';
 import '../imports/api/user.js';
 import '../imports/api/url.db.js';
 import '../imports/api/hw.db.js';
