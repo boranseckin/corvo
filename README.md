@@ -1,4 +1,5 @@
 ![Logo](./corvo-logo.png)
+
 # [![Build Status](https://travis-ci.com/boranseckin/corvo.svg?branch=master)](https://travis-ci.com/boranseckin/corvo) ![David](https://img.shields.io/david/boranseckin/corvo.svg)
 
 Corvo is a web application development playground. I am trying to develop different apps that would enhance some of the basic stuff I do regularly.
@@ -84,7 +85,7 @@ To run the app in "test mode" and be able to edit it while testing, use this lin
 meteor npm run test-app
 ```
 
-## Hosting
+## Hosting ![Website](https://img.shields.io/website?down_color=lightgrey&down_message=down&up_color=dark%20green&up_message=up&url=https%3A%2F%2Fcorvoapp.com)
 
 The latest version of Corvo is hosted at [https://corvoapp.com](https://corvoapp.com). Feel free to visit the website, create an account and use all the features it offers. All the created content is private and unique for each user. If you do not want to signup; you can use the test account:
 
