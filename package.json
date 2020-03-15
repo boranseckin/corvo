@@ -31,8 +31,8 @@
     }
   },
   "dependencies": {
-    "@babel/runtime": "^7.8.4",
-    "antd": "^3.26.12",
+    "@babel/runtime": "^7.8.7",
+    "antd": "^3.26.13",
     "bcrypt": "^3.0.8",
     "browserslist": "^4.9.1",
     "caniuse-lite": "1.0.30000999",
@@ -40,7 +40,7 @@
     "eslint-scope": "^5.0.0",
     "indexof": "0.0.1",
     "meteor-node-stubs": "^0.4.1",
-    "npm": "^6.14.1",
+    "npm": "^6.14.2",
     "react": "^16.13.0",
     "react-color": "^2.18.0",
     "react-dom": "^16.13.0",
@@ -67,7 +67,7 @@
     "eslint-plugin-import": "^2.20.1",
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-meteor": "^5.2.0",
-    "eslint-plugin-react": "^7.18.3",
+    "eslint-plugin-react": "^7.19.0",
     "npm-force-resolutions": "0.0.3",
     "tar": "^4.4.13"
   }
