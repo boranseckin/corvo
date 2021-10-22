@@ -100,7 +100,7 @@ If you have an issue or a suggestion please fill out an issue form.
 * [Meteor](https://www.meteor.com/) - The web framework used
 * [ReactJS](https://reactjs.org/) - The user interface library used
 * [MongoDB](https://www.mongodb.com/) - The database program used
-* [Ant.Desing](https://ant.design.com/) - The UI framework used
+* [Ant.Design](https://ant.design.com/) - The UI framework used
 
 ## Author
 
